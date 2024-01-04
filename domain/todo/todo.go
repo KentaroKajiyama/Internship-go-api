@@ -3,6 +3,9 @@ package todo
 import (
 	"time"
 	//"kiravia.com/internship-go-api/domain/user"
+	"unicode/utf8"
+
+	errDomain "github.com/KentaroKajiyama/internship-go-api/domain/error"
 )
 
 type Todo struct {
@@ -41,13 +44,13 @@ func (s *Todo) UpdatedAt() time.Time {
 func newTodo(todo_id int, title string, description string, term_protect bool, createdAT time.Time, updatedAt time.Time) (*Todo, error) {
 	// バリデーション
 	// タイトルのバリデーション
-	// if utf8.RuneCountInString(title) < titleLengthMin && utf8.RuneCountInString(title) > titleLengthMax {
-	// 	return nil, errDomain.NewError("タイトルが不正です。")
-	// }
+	if utf8.RuneCountInString(title) < titleLengthMin && utf8.RuneCountInString(title) > titleLengthMax {
+		return nil, errDomain.NewError("タイトルが不正です。")
+	}
 	// 内容のバリデーション
-	// if utf8.RuneCountInString(description) < descriptionLengthMin && utf8.RuneCountInString(description) > descriptionLengthMax {
-	// 	return nil, errDomain.NewError("内容が不正です。")
-	// }
+	if utf8.RuneCountInString(description) < descriptionLengthMin && utf8.RuneCountInString(description) > descriptionLengthMax {
+		return nil, errDomain.NewError("内容が不正です。")
+	}
 	return &Todo{
 		todo_id:      todo_id,
 		title:        title,
@@ -58,7 +61,6 @@ func newTodo(todo_id int, title string, description string, term_protect bool, c
 	}, nil
 }
 
-/*
 const (
 	// Titleの最小値・最大値
 	titleLengthMin = 1
@@ -68,7 +70,6 @@ const (
 	descriptionLengthMin = 1
 	descriptionLengthMax = 1000
 )
-*/
 
 /* Todo_idをどう決めていくか、とりあえず10にしている */
 func NewUser(title, description string, term_protect bool, createdAt, updatedAt time.Time) (*Todo, error) {

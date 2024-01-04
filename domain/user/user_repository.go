@@ -1,6 +1,11 @@
 package user
 
+import (
+	"context"
+)
+
 type UserRepository interface {
-	Create(User *User) (*User, error)
-	Update(User *User) (*User, error)
+	Create(ctx context.Context, user *User) error
+	Update(ctx context.Context, user *User) error
+	Delete(ctx context.Context, user *User) error
 }

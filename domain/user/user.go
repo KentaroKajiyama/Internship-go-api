@@ -2,10 +2,11 @@ package user
 
 import (
 	"time"
-	// "unicode/utf8"
+	"unicode/utf8"
+
+	errDomain "github.com/KentaroKajiyama/internship-go-api/domain/error"
 
 	"github.com/google/uuid"
-	// errDomain "kiravia.com/internship-go-api/domain/error"
 )
 
 type User struct {
@@ -42,10 +43,13 @@ func newUser(id uuid.UUID, name string, email string, createdAt time.Time, updat
 	// 	return nil, err
 	// }
 	// 名前のバリデーション
-	// if utf8.RuneCountInString(name) < nameLengthMin {
-	// 	return nil, errDomain.NewError("ユーザー名が不正です。")
-	// }
+	if utf8.RuneCountInString(name) < nameLengthMin {
+		return nil, errDomain.NewError("ユーザー名が不正です。")
+	}
 	// emailのバリデーション
+	if utf8.RuneCountInString(email) < emailLengthMin {
+		return nil, errDomain.NewError("emailが不正です。")
+	}
 
 	return &User{
 		id:        id,
