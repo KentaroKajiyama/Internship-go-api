@@ -1,4 +1,4 @@
-module github.com/KentaroKajiyama/internship-go-api
+module github.com/KentaroKajiyama/Internship-go-api
 
 go 1.21.3
 
