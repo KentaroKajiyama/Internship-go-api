@@ -3,7 +3,6 @@ package database
 import (
 	"context"
 
-	"github.com/KentaroKajiyama/internship-go-api/domain"
 	"github.com/KentaroKajiyama/internship-go-api/domain/entity"
 	"github.com/KentaroKajiyama/internship-go-api/infrastructure/database/model"
 	"github.com/samber/lo"
@@ -35,6 +34,6 @@ func (s SampleRepository) FindById(ctx context.Context, id string) (*entity.Samp
 	return lo.ToPtr(sampleModel.ToEntity()), nil
 }
 
-func NewSampleRepository(db *gorm.DB) domain.ISampleRepository {
-	return &SampleRepository{db: db}
-}
+// func NewSampleRepository(db *gorm.DB) domain.ISampleRepository {
+// 	return &SampleRepository{db: db}
+// }

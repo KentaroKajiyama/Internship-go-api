@@ -2,7 +2,6 @@ package tag
 
 import (
 	"time"
-	//"kiravia.com/internship-go-api/domain/user"
 	"unicode/utf8"
 
 	errDomain "github.com/KentaroKajiyama/internship-go-api/domain/error"

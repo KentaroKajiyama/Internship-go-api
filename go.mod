@@ -1,4 +1,4 @@
-module kiravia.com/internship-go-api
+module github.com/KentaroKajiyama/internship-go-api
 
 go 1.21.3
 

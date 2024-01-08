@@ -8,8 +8,8 @@ func (s *Todo) ToDomainTodo() todoDomain.Todo {
 	return todoDomain.NewTodo(s.Id, s.Title, s.Text, s.IsDeletable, s.CreatedAt, s.UpdatedAt)
 }
 
-func (s *Todo) NewTodoFromDomainTodo(todo *todoDomain.Todo) Todo {
-	return Todo{
+func (s *Todo) NewTodoFromDomainTodo(todo *todoDomain.Todo) *Todo {
+	return &Todo{
 		Id:          todo.Id(),
 		TodoId:      todo.TodoId(),
 		Title:       todo.Title(),

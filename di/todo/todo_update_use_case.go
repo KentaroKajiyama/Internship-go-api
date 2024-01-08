@@ -8,7 +8,6 @@ import (
 	"github.com/KentaroKajiyama/internship-go-gpi/infrastructure"
 	"github.com/KentaroKajiyama/internship-go-gpi/infrastructure/repository"
 	"github.com/google/wire"
-	"kiravia.com/internship-go-api/application/todo"
 )
 
 var provideSetUpdate = wire.NewSet(

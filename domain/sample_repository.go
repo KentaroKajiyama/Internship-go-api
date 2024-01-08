@@ -3,7 +3,7 @@ package domain
 import (
 	"context"
 
-	"kiravia.com/internship-go-api/domain/entity"
+	"github.com/KentaroKajiyama/internship-go-api/domain/entity"
 )
 
 type ISampleRepository interface {

@@ -4,11 +4,11 @@
 package di
 
 import (
+	"github.com/KentaroKajiyama/internship-go-api/application/sample"
+	"github.com/KentaroKajiyama/internship-go-api/infrastructure"
+	"github.com/KentaroKajiyama/internship-go-api/infrastructure/auth"
+	"github.com/KentaroKajiyama/internship-go-api/infrastructure/database"
 	"github.com/google/wire"
-	"kiravia.com/internship-go-api/application/sample"
-	"kiravia.com/internship-go-api/infrastructure"
-	"kiravia.com/internship-go-api/infrastructure/auth"
-	"kiravia.com/internship-go-api/infrastructure/database"
 )
 
 var providerSet = wire.NewSet(

@@ -3,7 +3,7 @@ package model
 import (
 	"time"
 
-	"kiravia.com/internship-go-api/domain/entity"
+	"github.com/KentaroKajiyama/internship-go-api/domain/entity"
 )
 
 type Sample struct {
