@@ -34,5 +34,5 @@ func CreateTodo() *todo.CreateTodoUseCase {
 	wire.Build(
 		provideSetCreate,
 	)
-	return &todo.CreateTodoUseCase{}
+	return nil
 }

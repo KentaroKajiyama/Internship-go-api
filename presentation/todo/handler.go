@@ -26,7 +26,7 @@ type PostTodosParams struct {
 
 type PutTodosParams struct {
 	ID          string `query:"id"`
-	TodoID      string `query:"todo_id"`
+	TodoID      int    `query:"todo_id"`
 	Title       string `json:"title" form:"title" query:"title"`
 	Description string `json:"description" form:"description" query:"description"`
 	IsDeletable bool   `json:"is_deletable" form:"is_deletable" query:"is_deletable"`
@@ -34,7 +34,7 @@ type PutTodosParams struct {
 
 type DeleteTodosParams struct {
 	ID          string `query:"id"`
-	TodoID      string `json:"description" form:"description" query:"description"`
+	TodoID      int    `json:"description" form:"description" query:"description"`
 	IsDeletable bool   `json:"is_deletable" form:"is_deletable" query:"is_deletable"`
 }
 
@@ -56,10 +56,10 @@ func (h *TodoHandler) PostTodos(ctx echo.Context) error {
 	}
 	//  Presentation -> UseCase
 	input_dto := todoApp.CreateTodoUseCaseInputDto{
-		id:           params.ID,
-		title:        params.Title,
-		description:  params.Description,
-		is_deletable: params.IsDeletable,
+		ID:          params.ID,
+		Title:       params.Title,
+		Description: params.Description,
+		IsDeletable: params.IsDeletable,
 	}
 	// UseCase処理
 	err = todoDi.CreateTodo().Create(ctx.Request().Context(), input_dto)
@@ -88,11 +88,11 @@ func (h *TodoHandler) PutTodos(ctx echo.Context) error {
 	}
 	//  Presentation -> UseCase
 	input_dto := todoApp.UpdateTodoUseCaseInputDto{
-		id:           params.ID,
-		todo_id:      params.TodoID,
-		title:        params.Title,
-		description:  params.Description,
-		is_deletable: params.IsDeletable,
+		ID:          params.ID,
+		TodoID:      params.TodoID,
+		Title:       params.Title,
+		Description: params.Description,
+		IsDeletable: params.IsDeletable,
 	}
 	// UseCase処理
 	err = todoDi.UpdateTodo().Update(ctx.Request().Context(), input_dto)
@@ -121,9 +121,9 @@ func (h *TodoHandler) DeleteTodos(ctx echo.Context) error {
 	}
 	//  Presentation -> UseCase
 	input_dto := todoApp.DeleteTodoUseCaseInputDto{
-		id:           params.ID,
-		todo_id:      params.TodoID,
-		is_deletable: params.IsDeletable,
+		ID:          params.ID,
+		TodoID:      params.TodoID,
+		IsDeletable: params.IsDeletable,
 	}
 	// UseCase処理
 	err = todoDi.DeleteTodo().Delete(ctx.Request().Context(), input_dto)

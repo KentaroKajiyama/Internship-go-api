@@ -17,18 +17,18 @@ func NewDeleteTodoUseCase(todoRepository todoDomain.TodoRepository) *DeleteTodoU
 
 // todo項目削除
 type DeleteTodoUseCaseInputDto struct {
-	id           string
-	todo_id      int
-	term_protect bool
+	ID          string
+	TodoID      int
+	IsDeletable bool
 }
 
 // 新規項目を作成してリポジトリに登録する
-func (uc *DeleteTodoUseCase) Deleteer(ctx context.Context, dto DeleteTodoUseCaseInputDto) error {
-	todo, err := uc.todoRepository.Find(ctx, dto.id, dto.todo_id)
+func (uc *DeleteTodoUseCase) Delete(ctx context.Context, dto DeleteTodoUseCaseInputDto) error {
+	todo, err := uc.todoRepository.Find(ctx, dto.ID, dto.TodoID)
 	if err != nil {
 		return err
 	}
-	if !dto.term_protect {
+	if !dto.IsDeletable {
 		return uc.todoRepository.Delete(ctx, todo)
 	}
 	return errDomain.NewError("削除保護が有効になっているため、削除できません。")

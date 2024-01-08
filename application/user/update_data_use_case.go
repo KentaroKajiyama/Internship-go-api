@@ -17,13 +17,13 @@ func NewUpdateUserUseCase(userRepository userDomain.UserRepository) *RegistUserU
 
 // ユーザー情報変更
 type UpdateUserUseCaseInputDto struct {
-	id    string
-	name  string
-	email string
+	ID    string
+	Name  string
+	Email string
 }
 
 func (uc *UpdateUserUseCase) Update(ctx context.Context, dto UpdateUserUseCaseInputDto) error {
-	user, err := userDomain.ReconstructUser(dto.id, dto.name, dto.email, time.Now(), time.Now())
+	user, err := userDomain.ReconstructUser(dto.ID, dto.Name, dto.Email, time.Now(), time.Now())
 	if err != nil {
 		return err
 	}

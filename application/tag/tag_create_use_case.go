@@ -17,13 +17,13 @@ func NewRegistTagUseCase(tagRepository tagDomain.TagRepository) *RegistTagUseCas
 
 // tag項目新規作成
 type RegistTagUseCaseInputDto struct {
-	id    string
-	title string
+	ID    string
+	Title string
 }
 
 // 新規項目を作成してリポジトリに登録する。
 func (uc *RegistTagUseCase) Register(ctx context.Context, dto RegistTagUseCaseInputDto) error {
-	user, err := tagDomain.NewTag(dto.id, dto.title, time.Now(), time.Now())
+	user, err := tagDomain.NewTag(dto.ID, dto.Title, time.Now(), time.Now())
 	if err != nil {
 		return err
 	}

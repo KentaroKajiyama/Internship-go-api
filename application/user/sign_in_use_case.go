@@ -17,12 +17,12 @@ func NewRegistUserUseCase(userRepository userDomain.UserRepository) *RegistUserU
 
 // ユーザー登録
 type RegistUserUseCaseInputDto struct {
-	name  string
-	email string
+	Name  string
+	Email string
 }
 
 func (uc *RegistUserUseCase) Register(ctx context.Context, dto RegistUserUseCaseInputDto) error {
-	user, err := userDomain.NewUser(dto.name, dto.email, time.Now(), time.Now())
+	user, err := userDomain.NewUser(dto.Name, dto.Email, time.Now(), time.Now())
 	if err != nil {
 		return err
 	}
