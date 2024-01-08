@@ -5,7 +5,7 @@ import (
 	"github.com/labstack/echo/v4"
 	"github.com/KentaroKajiyama/Internship-go-api/di"
 	"net/http"
-	userUseCase "github.com/KentaroKajiyama/internship-go-api/application/user"
+	userUseCase "github.com/KentaroKajiyama/Internship-go-api/application/user"
 )
 
 type userHandler struct {
