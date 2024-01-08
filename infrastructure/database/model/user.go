@@ -4,11 +4,11 @@ import (
 	userDomain "github.com/KentaroKajiyama/Internship-go-api/domain/user"
 )
 
-func (s *User) ToDomainUser() userDomain.User {
+func (s *User) ToDomainUser() (*userDomain.User, error) {
 	return userDomain.NewUser(s.Name, s.Email, s.CreatedAt, s.UpdatedAt)
 }
 
-func (s *User) NewUserFromDomainUser(user *userDomain.User) User {
+func NewUserFromDomainUser(user *userDomain.User) User {
 	return User{
 		Id:        user.Id(),
 		Name:      user.Name(),

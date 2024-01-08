@@ -1,9 +1,6 @@
 package settings
 
-import (
-	"github.com/labstack/echo/v4"
-)
-
+/*
 func returnAbortWith(ctx *echo.Context, code int, err error) {
 	var msg string
 	if err != nil {
@@ -15,3 +12,4 @@ func returnAbortWith(ctx *echo.Context, code int, err error) {
 		"msg":  msg,
 	})
 }
+*/

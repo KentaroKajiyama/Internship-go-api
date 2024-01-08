@@ -1,5 +1,6 @@
 package user
 
+/*
 import (
 	validator "github.com/KentaroKajiyama/Internship-go-api/pkg/validator"
 	"github.com/labstack/echo/v4"
@@ -26,4 +27,5 @@ func NewUserHandler(
 	}
 }
 
-func (uh *userHandler) 
+func (uh *userHandler)
+*/

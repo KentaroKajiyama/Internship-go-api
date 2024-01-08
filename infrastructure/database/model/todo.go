@@ -4,16 +4,16 @@ import (
 	todoDomain "github.com/KentaroKajiyama/Internship-go-api/domain/todo"
 )
 
-func (s *Todo) ToDomainTodo() todoDomain.Todo {
+func (s *Todo) ToDomainTodo() (*todoDomain.Todo, error) {
 	return todoDomain.NewTodo(s.Id, s.Title, s.Text, s.IsDeletable, s.CreatedAt, s.UpdatedAt)
 }
 
-func (s *Todo) NewTodoFromDomainTodo(todo *todoDomain.Todo) *Todo {
+func NewTodoFromDomainTodo(todo *todoDomain.Todo) *Todo {
 	return &Todo{
 		Id:          todo.Id(),
 		TodoId:      todo.TodoId(),
 		Title:       todo.Title(),
-		Text:        todo.Text(),
+		Text:        todo.Description(),
 		IsDeletable: todo.IsDeletable(),
 		CreatedAt:   todo.CreatedAt(),
 		UpdatedAt:   todo.UpdatedAt(),

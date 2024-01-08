@@ -17,16 +17,16 @@ func NewUpdateTodoUseCase(todoRepository todoDomain.TodoRepository) *UpdateTodoU
 
 // todo項目更新
 type UpdateTodoUseCaseInputDto struct {
-	id           string
-	todo_id      int
-	title        string
-	description  string
-	is_deletable bool
+	id          string
+	todo_id     int
+	title       string
+	description string
+	isDeletable bool
 }
 
 // 特定の項目を変更してリポジトリに登録する
 func (uc *UpdateTodoUseCase) Update(ctx context.Context, dto UpdateTodoUseCaseInputDto) error {
-	todo, err := todoDomain.ReconstructTodo(dto.todo_id, dto.title, dto.description, dto.term_protect, time.Now(), time.Now())
+	todo, err := todoDomain.ReconstructTodo(dto.id, dto.todo_id, dto.title, dto.description, dto.isDeletable, time.Now(), time.Now())
 	if err != nil {
 		return err
 	}

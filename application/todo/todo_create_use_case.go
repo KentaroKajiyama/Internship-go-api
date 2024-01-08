@@ -17,15 +17,15 @@ func NewCreateTodoUseCase(todoRepository todoDomain.TodoRepository) *CreateTodoU
 
 // todo項目新規作成
 type CreateTodoUseCaseInputDto struct {
-	id           string
-	title        string
-	description  string
-	is_deletable string
+	id          string
+	title       string
+	description string
+	isDeletable bool
 }
 
 // 新規項目を作成してリポジトリに登録する、userはどうする？
 func (uc *CreateTodoUseCase) Create(ctx context.Context, dto CreateTodoUseCaseInputDto) error {
-	todo, err := todoDomain.NewTodo(dto.id, dto.title, dto.description, dto.is_deletable, time.Now(), time.Now())
+	todo, err := todoDomain.NewTodo(dto.id, dto.title, dto.description, dto.isDeletable, time.Now(), time.Now())
 	if err != nil {
 		return err
 	}

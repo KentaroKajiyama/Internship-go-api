@@ -4,17 +4,17 @@ import (
 	"time"
 	"unicode/utf8"
 
-	errDomain "github.com/KentaroKajiyama/internship-go-api/domain/error"
+	errDomain "github.com/KentaroKajiyama/Internship-go-api/domain/error"
 )
 
 type Todo struct {
-	id           string
-	todo_id      int
-	title        string
-	description  string
-	is_deletable bool
-	createdAT    time.Time
-	updatedAt    time.Time
+	id          string
+	todoId      int
+	title       string
+	description string
+	isDeletable bool
+	createdAT   time.Time
+	updatedAt   time.Time
 }
 
 func (s *Todo) Id() string {
@@ -22,7 +22,7 @@ func (s *Todo) Id() string {
 }
 
 func (s *Todo) TodoId() int {
-	return s.todo_id
+	return s.todoId
 }
 
 func (s *Todo) Title() string {
@@ -34,7 +34,7 @@ func (s *Todo) Description() string {
 }
 
 func (s *Todo) IsDeletable() bool {
-	return s.is_deletable
+	return s.isDeletable
 }
 
 func (s *Todo) CreatedAt() time.Time {
@@ -45,7 +45,7 @@ func (s *Todo) UpdatedAt() time.Time {
 	return s.updatedAt
 }
 
-func newTodo(id string, todo_id int, title string, description string, is_deletable bool, createdAT time.Time, updatedAt time.Time) (*Todo, error) {
+func newTodo(id string, todoId int, title string, description string, isDeletable bool, createdAT time.Time, updatedAt time.Time) (*Todo, error) {
 	// バリデーション
 	// タイトルのバリデーション
 	if utf8.RuneCountInString(title) < titleLengthMin && utf8.RuneCountInString(title) > titleLengthMax {
@@ -56,13 +56,13 @@ func newTodo(id string, todo_id int, title string, description string, is_deleta
 		return nil, errDomain.NewError("内容が不正です。")
 	}
 	return &Todo{
-		id:           id,
-		todo_id:      todo_id,
-		title:        title,
-		description:  description,
-		is_deletable: is_deletable,
-		createdAT:    createdAT,
-		updatedAt:    updatedAt,
+		id:          id,
+		todoId:      todoId,
+		title:       title,
+		description: description,
+		isDeletable: isDeletable,
+		createdAT:   createdAT,
+		updatedAt:   updatedAt,
 	}, nil
 }
 
@@ -77,25 +77,25 @@ const (
 )
 
 /* Todo_idをどう決めていくか、とりあえず10にしている */
-func NewTodo(id string, title, description string, is_deletable bool, createdAt, updatedAt time.Time) (*Todo, error) {
+func NewTodo(id string, title, description string, isDeletable bool, createdAt, updatedAt time.Time) (*Todo, error) {
 	return newTodo(
 		id,
 		10,
 		title,
 		description,
-		is_deletable,
+		isDeletable,
 		createdAt,
 		updatedAt,
 	)
 }
 
-func ReconstructTodo(id string, todo_id int, title, description string, is_deletable bool, createdAt, updatedAt time.Time) (*Todo, error) {
+func ReconstructTodo(id string, todoId int, title, description string, isDeletable bool, createdAt, updatedAt time.Time) (*Todo, error) {
 	return newTodo(
 		id,
-		todo_id,
+		todoId,
 		title,
 		description,
-		is_deletable,
+		isDeletable,
 		createdAt,
 		updatedAt,
 	)

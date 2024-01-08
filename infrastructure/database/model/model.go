@@ -14,7 +14,7 @@ type User struct {
 
 type Todo struct {
 	Id          string `gorm:"primaryKey"`
-	TodoId      string `gorm:"primaryKey"`
+	TodoId      int    `gorm:"primaryKey"`
 	Title       string
 	Text        string
 	IsDeletable bool
@@ -24,7 +24,7 @@ type Todo struct {
 
 type Tag struct {
 	Id        string `gorm:"primaryKey"`
-	TagId     string `gorm:"primaryKey"`
+	TagId     int    `gorm:"primaryKey"`
 	Name      string
 	CreatedAt time.Time
 	UpdatedAt time.Time

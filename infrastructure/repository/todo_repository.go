@@ -19,7 +19,7 @@ func NewTodoRepository(db *gorm.DB) *todoRepository {
 func (r *todoRepository) Create(ctx context.Context, todo *todoDomain.Todo) error {
 	conn := r.db.WithContext(ctx)
 	todoModel := model.NewTodoFromDomainTodo(todo)
-	if err := conn.Create(todoModel).Error(); err != nil {
+	if err := conn.Create(todoModel).Error; err != nil {
 		return err
 	}
 	return nil
@@ -28,7 +28,7 @@ func (r *todoRepository) Create(ctx context.Context, todo *todoDomain.Todo) erro
 func (r *todoRepository) Update(ctx context.Context, todo *todoDomain.Todo) error {
 	conn := r.db.WithContext(ctx)
 	todoModel := model.NewTodoFromDomainTodo(todo)
-	if err := conn.Update(todoModel).Error(); err != nil {
+	if err := conn.Update(todo.Id(), todoModel).Error; err != nil {
 		return err
 	}
 	return nil
@@ -37,7 +37,7 @@ func (r *todoRepository) Update(ctx context.Context, todo *todoDomain.Todo) erro
 func (r *todoRepository) Delete(ctx context.Context, todo *todoDomain.Todo) error {
 	conn := r.db.WithContext(ctx)
 	todoModel := model.NewTodoFromDomainTodo(todo)
-	if err := conn.Delete(todoModel).Error(); err != nil {
+	if err := conn.Delete(todoModel).Error; err != nil {
 		return err
 	}
 	return nil

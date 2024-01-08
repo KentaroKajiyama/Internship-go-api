@@ -9,10 +9,10 @@ import (
 	"github.com/spf13/viper"
 )
 
-//go:embed config.yaml
+//go:embed config.example.yaml
 var configYaml []byte
 
-//go:embed google_credentials.json
+//go:embed google_credentials.example.json
 var googleCredentialsJson []byte
 
 var Conf *config
