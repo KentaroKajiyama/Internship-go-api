@@ -1,7 +1,7 @@
 package route
 
 import (
-	todoPre "github.com/KentaroKajiyama/internship-go-api/presentation/todo"
+	todoPre "github.com/KentaroKajiyama/Internship-go-api/presentation/todo"
 	"github.com/labstack/echo/v4"
 )
 

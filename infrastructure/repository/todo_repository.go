@@ -3,8 +3,8 @@ package repository
 import (
 	"context"
 
-	todoDomain "github.com/KentaroKajiyama/internship-go-api/domain/todo"
-	"github.com/KentaroKajiyama/internship-go-api/infrastructure/database/model"
+	todoDomain "github.com/KentaroKajiyama/Internship-go-api/domain/todo"
+	"github.com/KentaroKajiyama/Internship-go-api/infrastructure/database/model"
 	"gorm.io/gorm"
 )
 

@@ -3,8 +3,8 @@ package database
 import (
 	"context"
 
-	"github.com/KentaroKajiyama/internship-go-api/domain/entity"
-	"github.com/KentaroKajiyama/internship-go-api/infrastructure/database/model"
+	"github.com/KentaroKajiyama/Internship-go-api/domain/entity"
+	"github.com/KentaroKajiyama/Internship-go-api/infrastructure/database/model"
 	"github.com/samber/lo"
 	"gorm.io/gorm"
 )

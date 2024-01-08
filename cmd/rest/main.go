@@ -9,8 +9,8 @@ import (
 	"os/signal"
 	"time"
 
-	"github.com/KentaroKajiyama/internship-go-api/config"
-	"github.com/KentaroKajiyama/internship-go-api/presentation/server/route"
+	"github.com/KentaroKajiyama/Internship-go-api/config"
+	"github.com/KentaroKajiyama/Internship-go-api/presentation/server/route"
 	"github.com/labstack/echo/v4"
 	"github.com/labstack/echo/v4/middleware"
 )

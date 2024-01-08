@@ -3,23 +3,21 @@ package todo
 import (
 	"context"
 
-	"github.com/google/uuid"
-
-	errDomain "github.com/KentaroKajiyama/internship-go-api/domain/error"
-	todoDomain "github.com/KentaroKajiyama/internship-go-api/domain/todo"
+	errDomain "github.com/KentaroKajiyama/Internship-go-api/domain/error"
+	todoDomain "github.com/KentaroKajiyama/Internship-go-api/domain/todo"
 )
 
 type DeleteTodoUseCase struct {
 	todoRepository todoDomain.TodoRepository
 }
 
-func NewDeleteTodoUseCase(todoRepository todoDomain.todoRepository) *DeleteTodoUseCase {
+func NewDeleteTodoUseCase(todoRepository todoDomain.TodoRepository) *DeleteTodoUseCase {
 	return &DeleteTodoUseCase{todoRepository: todoRepository}
 }
 
 // todo項目削除
 type DeleteTodoUseCaseInputDto struct {
-	id           uuid.UUID
+	id           string
 	todo_id      int
 	term_protect bool
 }

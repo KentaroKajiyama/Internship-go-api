@@ -4,11 +4,10 @@
 package todo
 
 import (
-	"github.com/KentaroKajiyama/internship-go-gpi/application/todo"
-	"github.com/KentaroKajiyama/internship-go-gpi/infrastructure"
-	"github.com/KentaroKajiyama/internship-go-gpi/infrastructure/repository"
+	"github.com/KentaroKajiyama/Internship-go-gpi/application/todo"
+	"github.com/KentaroKajiyama/Internship-go-gpi/infrastructure"
+	"github.com/KentaroKajiyama/Internship-go-gpi/infrastructure/repository"
 	"github.com/google/wire"
-	"kiravia.com/internship-go-api/application/todo"
 )
 
 var provideSetDelete = wire.NewSet(

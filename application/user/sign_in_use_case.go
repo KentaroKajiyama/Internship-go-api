@@ -4,7 +4,7 @@ import (
 	"context"
 	"time"
 
-	userDomain "github.com/KentaroKajiyama/internship-go-api/domain/user"
+	userDomain "github.com/KentaroKajiyama/Internship-go-api/domain/user"
 )
 
 type RegistUserUseCase struct {

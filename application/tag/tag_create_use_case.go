@@ -4,28 +4,26 @@ import (
 	"context"
 	"time"
 
-	"github.com/google/uuid"
-
-	tagDomain "github.com/KentaroKajiyama/internship-go-api/domain/tag"
+	tagDomain "github.com/KentaroKajiyama/Internship-go-api/domain/tag"
 )
 
 type RegistTagUseCase struct {
-	tagRepository tagDomain.tagRepository
+	tagRepository tagDomain.TagRepository
 }
 
-func NewRegistTagUseCase(tagRepository tagDomain.tagRepository) *RegistTagUseCase {
+func NewRegistTagUseCase(tagRepository tagDomain.TagRepository) *RegistTagUseCase {
 	return &RegistTagUseCase{tagRepository: tagRepository}
 }
 
 // tag項目新規作成
 type RegistTagUseCaseInputDto struct {
-	id    uuid.UUID
+	id    string
 	title string
 }
 
 // 新規項目を作成してリポジトリに登録する。
 func (uc *RegistTagUseCase) Register(ctx context.Context, dto RegistTagUseCaseInputDto) error {
-	user, err := tagDomain.NewTag(dto.title, time.Now(), time.Now())
+	user, err := tagDomain.NewTag(dto.id, dto.title, time.Now(), time.Now())
 	if err != nil {
 		return err
 	}

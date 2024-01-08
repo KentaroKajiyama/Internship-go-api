@@ -1,7 +1,7 @@
 package model
 
 import (
-	todoDomain "github.com/KentaroKajiyama/internship-go-api/domain/todo"
+	todoDomain "github.com/KentaroKajiyama/Internship-go-api/domain/todo"
 )
 
 func (s *Todo) ToDomainTodo() todoDomain.Todo {

@@ -5,7 +5,7 @@ import (
 	"fmt"
 	"time"
 
-	"github.com/KentaroKajiyama/internship-go-api/domain"
+	"github.com/KentaroKajiyama/Internship-go-api/domain"
 )
 
 type PingPong struct {

@@ -4,14 +4,14 @@ import (
 	"context"
 	"time"
 
-	todoDomain "github.com/KentaroKajiyama/internship-go-api/domain/todo"
+	todoDomain "github.com/KentaroKajiyama/Internship-go-api/domain/todo"
 )
 
 type UpdateTodoUseCase struct {
 	todoRepository todoDomain.TodoRepository
 }
 
-func NewUpdateTodoUseCase(todoRepository todoDomain.todoRepository) *UpdateTodoUseCase {
+func NewUpdateTodoUseCase(todoRepository todoDomain.TodoRepository) *UpdateTodoUseCase {
 	return &UpdateTodoUseCase{todoRepository: todoRepository}
 }
 

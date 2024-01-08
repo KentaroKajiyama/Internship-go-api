@@ -1,9 +1,9 @@
 package user
 
 import (
-	validator "github.com/KentaroKajiyama/internship-go-api/pkg/validator"
+	validator "github.com/KentaroKajiyama/Internship-go-api/pkg/validator"
 	"github.com/labstack/echo/v4"
-	"github.com/KentaroKajiyama/internship-go-api/di"
+	"github.com/KentaroKajiyama/Internship-go-api/di"
 	"net/http"
 	userUseCase "github.com/KentaroKajiyama/internship-go-api/application/user"
 )

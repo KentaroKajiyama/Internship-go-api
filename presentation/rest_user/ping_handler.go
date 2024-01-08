@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"net/http"
 
-	"github.com/KentaroKajiyama/internship-go-api/di"
+	"github.com/KentaroKajiyama/Internship-go-api/di"
 	"github.com/labstack/echo/v4"
 )
 

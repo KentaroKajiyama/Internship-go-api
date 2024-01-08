@@ -5,7 +5,7 @@ import (
 	"sync"
 	"time"
 
-	"github.com/KentaroKajiyama/internship-go-api/config"
+	"github.com/KentaroKajiyama/Internship-go-api/config"
 	"gorm.io/driver/postgres"
 	"gorm.io/gorm"
 	"gorm.io/gorm/clause"

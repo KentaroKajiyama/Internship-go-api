@@ -3,7 +3,7 @@ package auth
 import (
 	"context"
 
-	"github.com/KentaroKajiyama/internship-go-api/domain"
+	"github.com/KentaroKajiyama/Internship-go-api/domain"
 )
 
 type mock struct {

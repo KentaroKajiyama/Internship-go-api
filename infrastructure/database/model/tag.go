@@ -1,7 +1,7 @@
 package model
 
 import (
-	tagDomain "github.com/KentaroKajiyama/internship-go-api/domain/tag"
+	tagDomain "github.com/KentaroKajiyama/Internship-go-api/domain/tag"
 )
 
 func (s *Tag) ToDomainTag() tagDomain.Tag {

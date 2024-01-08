@@ -4,30 +4,29 @@ import (
 	"context"
 	"time"
 
-	todoDomain "github.com/KentaroKajiyama/internship-go-api/domain/todo"
+	tagDomain "github.com/KentaroKajiyama/Internship-go-api/domain/tag"
 )
 
-type ChangeTodoUseCase struct {
-	todoRepository todoDomain.TodoRepository
+type UpdateTagUseCase struct {
+	tagRepository tagDomain.TagRepository
 }
 
-func NewChangeTodoUseCase(todoRepository todoDomain.todoRepository) *ChangeTodoUseCase {
-	return &ChangeTodoUseCase{todoRepository: todoRepository}
+func NewUpdateTagUseCase(tagRepository tagDomain.TagRepository) *UpdateTagUseCase {
+	return &UpdateTagUseCase{tagRepository: tagRepository}
 }
 
-// todo項目更新
-type ChangeTodoUseCaseInputDto struct {
-	todo_id      int
-	title        string
-	description  string
-	term_protect bool
+// tag項目更新
+type UpdateTagUseCaseInputDto struct {
+	id     string
+	tag_id int
+	title  string
 }
 
 // 特定の項目を変更してリポジトリに登録する
-func (uc *ChangeTodoUseCase) Changeer(ctx context.Context, dto ChangeTodoUseCaseInputDto) error {
-	user, err := todoDomain.ReconstructTodo(dto.todo_id, dto.title, dto.description, dto.term_protect, time.Now(), time.Now())
+func (uc *UpdateTagUseCase) Updateer(ctx context.Context, dto UpdateTagUseCaseInputDto) error {
+	user, err := tagDomain.ReconstructTag(dto.id, dto.tag_id, dto.title, time.Now(), time.Now())
 	if err != nil {
 		return err
 	}
-	return uc.todoRepository.Update(ctx, user)
+	return uc.tagRepository.Update(ctx, user)
 }

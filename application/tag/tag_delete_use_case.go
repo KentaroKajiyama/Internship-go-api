@@ -3,20 +3,20 @@ package tag
 import (
 	"context"
 
-	"github.com/google/uuid"
+	tagDomain "github.com/KentaroKajiyama/Internship-go-api/domain/tag"
 )
 
 type DeleteTagUseCase struct {
-	tagRepository tagDomain.tagRepository
+	tagRepository tagDomain.TagRepository
 }
 
-func NewDeleteTagUseCase(tagRepository tagDomain.tagRepository) *DeleteTagUseCase {
+func NewDeleteTagUseCase(tagRepository tagDomain.TagRepository) *DeleteTagUseCase {
 	return &DeleteTagUseCase{tagRepository: tagRepository}
 }
 
 // todo項目削除
 type DeleteTagUseCaseInputDto struct {
-	id     uuid.UUID
+	id     string
 	tag_id int
 }
 

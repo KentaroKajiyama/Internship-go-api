@@ -4,10 +4,10 @@
 package di
 
 import (
-	"github.com/KentaroKajiyama/internship-go-api/application/sample"
-	"github.com/KentaroKajiyama/internship-go-api/infrastructure"
-	"github.com/KentaroKajiyama/internship-go-api/infrastructure/auth"
-	"github.com/KentaroKajiyama/internship-go-api/infrastructure/database"
+	"github.com/KentaroKajiyama/Internship-go-api/application/sample"
+	"github.com/KentaroKajiyama/Internship-go-api/infrastructure"
+	"github.com/KentaroKajiyama/Internship-go-api/infrastructure/auth"
+	"github.com/KentaroKajiyama/Internship-go-api/infrastructure/database"
 	"github.com/google/wire"
 )
 

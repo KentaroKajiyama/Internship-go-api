@@ -4,20 +4,18 @@ import (
 	"time"
 	"unicode/utf8"
 
-	errDomain "github.com/KentaroKajiyama/internship-go-api/domain/error"
-
-	"github.com/google/uuid"
+	errDomain "github.com/KentaroKajiyama/Internship-go-api/domain/error"
 )
 
 type User struct {
-	id        uuid.UUID
+	id        string
 	name      string
 	email     string
 	createdAt time.Time
 	updatedAt time.Time
 }
 
-func (s *User) Id() uuid.UUID {
+func (s *User) Id() string {
 	return s.id
 }
 
@@ -37,7 +35,7 @@ func (s *User) UpdatedAt() time.Time {
 	return s.updatedAt
 }
 
-func newUser(id uuid.UUID, name string, email string, createdAt time.Time, updatedAt time.Time) (*User, error) {
+func newUser(id string, name string, email string, createdAt time.Time, updatedAt time.Time) (*User, error) {
 	// IDのバリデーション（必要ないかも）
 	// if err := uuid.Validate(id); err != nil {
 	// 	return nil, err
@@ -70,7 +68,7 @@ const (
 
 func NewUser(name, email string, createdAt, updatedAt time.Time) (*User, error) {
 	return newUser(
-		uuid.New(),
+		"hoge",
 		name,
 		email,
 		createdAt,
@@ -78,7 +76,7 @@ func NewUser(name, email string, createdAt, updatedAt time.Time) (*User, error) 
 	)
 }
 
-func ReconstructUser(id uuid.UUID, name, email string, createdAt, updatedAt time.Time) (*User, error) {
+func ReconstructUser(id string, name, email string, createdAt, updatedAt time.Time) (*User, error) {
 	return newUser(
 		id,
 		name,

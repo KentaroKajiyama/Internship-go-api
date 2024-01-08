@@ -4,9 +4,9 @@ import (
 	"fmt"
 	"net/http"
 
-	todoApp "github.com/KentaroKajiyama/internship-go-api/application/todo"
-	todoDi "github.com/KentaroKajiyama/internship-go-api/di/todo"
-	"github.com/KentaroKajiyama/internship-go-api/pkg/validator"
+	todoApp "github.com/KentaroKajiyama/Internship-go-api/application/todo"
+	todoDi "github.com/KentaroKajiyama/Internship-go-api/di/todo"
+	"github.com/KentaroKajiyama/Internship-go-api/pkg/validator"
 	"github.com/labstack/echo/v4"
 )
 

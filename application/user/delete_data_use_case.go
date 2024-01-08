@@ -4,8 +4,7 @@ import (
 	"context"
 	"time"
 
-	userDomain "github.com/KentaroKajiyama/internship-go-api/domain/user"
-	"github.com/google/uuid"
+	userDomain "github.com/KentaroKajiyama/Internship-go-api/domain/user"
 )
 
 type DeleteUserUseCase struct {
@@ -18,12 +17,12 @@ func NewDeleteUserUseCase(userRepository userDomain.UserRepository) *RegistUserU
 
 // ユーザー登録
 type DeleteUserUseCaseInputDto struct {
-	id    uuid.UUID
+	id    string
 	name  string
 	email string
 }
 
-func (uc *UpdateUserUseCase) Delete(ctx context.Context, dto ChangeUserUseCaseInputDto) error {
+func (uc *UpdateUserUseCase) Delete(ctx context.Context, dto DeleteUserUseCaseInputDto) error {
 	user, err := userDomain.ReconstructUser(dto.id, dto.name, dto.email, time.Now(), time.Now())
 	if err != nil {
 		return err
