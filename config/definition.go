@@ -3,9 +3,10 @@ package config
 import (
 	"bytes"
 	_ "embed"
-	"github.com/spf13/viper"
 	"os"
 	"strings"
+
+	"github.com/spf13/viper"
 )
 
 //go:embed config.yaml

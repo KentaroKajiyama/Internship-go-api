@@ -23,7 +23,7 @@ type DeleteUserUseCaseInputDto struct {
 	email string
 }
 
-func (uc *ChangeUserUseCase) Delete(ctx context.Context, dto ChangeUserUseCaseInputDto) error {
+func (uc *UpdateUserUseCase) Delete(ctx context.Context, dto ChangeUserUseCaseInputDto) error {
 	user, err := userDomain.ReconstructUser(dto.id, dto.name, dto.email, time.Now(), time.Now())
 	if err != nil {
 		return err

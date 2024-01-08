@@ -3,21 +3,30 @@ package tag
 import (
 	"time"
 	//"kiravia.com/internship-go-api/domain/user"
+	"unicode/utf8"
+
+	errDomain "github.com/KentaroKajiyama/internship-go-api/domain/error"
+	"github.com/google/uuid"
 )
 
 type Tag struct {
+	id        uuid.UUID
 	tag_id    int
-	title     string
+	name      string
 	createdAT time.Time
 	updatedAt time.Time
 }
 
-func (s *Tag) Id() int {
+func (s *Tag) Id() uuid.UUID {
+	return s.id
+}
+
+func (s *Tag) TagId() int {
 	return s.tag_id
 }
 
-func (s *Tag) Title() string {
-	return s.title
+func (s *Tag) Name() string {
+	return s.name
 }
 
 func (s *Tag) CreatedAt() time.Time {
@@ -28,42 +37,43 @@ func (s *Tag) UpdatedAt() time.Time {
 	return s.updatedAt
 }
 
-func newTag(tag_id int, title string, createdAT time.Time, updatedAt time.Time) (*Tag, error) {
+func newTag(id uuid.UUID, tag_id int, name string, createdAT time.Time, updatedAt time.Time) (*Tag, error) {
 	// バリデーション
 	// タイトルのバリデーション
-	// if utf8.RuneCountInString(title) < titleLengthMin && utf8.RuneCountInString(title) > titleLengthMax {
-	// 	return nil, errDomain.NewError("タイトルが不正です。")
-	// }
+	if utf8.RuneCountInString(name) < nameLengthMin && utf8.RuneCountInString(name) > nameLengthMax {
+		return nil, errDomain.NewError("タイトルが不正です。")
+	}
 	return &Tag{
+		id:        id,
 		tag_id:    tag_id,
-		title:     title,
+		name:      name,
 		createdAT: createdAT,
 		updatedAt: updatedAt,
 	}, nil
 }
 
-/*
 const (
-	// Titleの最小値・最大値
-	titleLengthMin = 1
-	titleLengthMax = 255
+	// nameの最小値・最大値
+	nameLengthMin = 1
+	nameLengthMax = 255
 )
-*/
 
 /* tag_idをどう決めていくか、とりあえず10にしている */
-func NewUser(title string, createdAt, updatedAt time.Time) (*Tag, error) {
+func NewTag(id uuid.UUID, name string, createdAt, updatedAt time.Time) (*Tag, error) {
 	return newTag(
+		id,
 		10,
-		title,
+		name,
 		createdAt,
 		updatedAt,
 	)
 }
 
-func ReconstructUser(tag_id int, title string, createdAt, updatedAt time.Time) (*Tag, error) {
+func ReconstructTag(id uuid.UUID, tag_id int, name string, createdAt, updatedAt time.Time) (*Tag, error) {
 	return newTag(
+		id,
 		tag_id,
-		title,
+		name,
 		createdAt,
 		updatedAt,
 	)

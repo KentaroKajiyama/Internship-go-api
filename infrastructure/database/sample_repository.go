@@ -3,11 +3,11 @@ package database
 import (
 	"context"
 
+	"github.com/KentaroKajiyama/internship-go-api/domain"
+	"github.com/KentaroKajiyama/internship-go-api/domain/entity"
+	"github.com/KentaroKajiyama/internship-go-api/infrastructure/database/model"
 	"github.com/samber/lo"
 	"gorm.io/gorm"
-	"kiravia.com/internship-go-api/domain"
-	"kiravia.com/internship-go-api/domain/entity"
-	"kiravia.com/internship-go-api/infrastructure/database/model"
 )
 
 type SampleRepository struct {
@@ -15,11 +15,14 @@ type SampleRepository struct {
 }
 
 func (s SampleRepository) Save(ctx context.Context, sample entity.Sample) (*entity.Sample, error) {
+	//db.WithContext(ctx)で返ってくるのはdb, ctx内のリクエスト情報が込められる
 	conn := s.db.WithContext(ctx)
 	sampleModel := model.NewSampleFromEntity(sample)
+	//Saveメソッドで primary key があるかないかでCREATEかUPDATEを実行する、その後エラーをハンドリングする。ここではエラーはうまくやってくれると信じる。
 	if err := conn.Save(&sampleModel).Error; err != nil {
 		return nil, err
 	}
+	// sampleModelをpointerに変換する
 	return lo.ToPtr(sampleModel.ToEntity()), nil
 }
 

@@ -8,22 +8,22 @@ import (
 	"github.com/google/uuid"
 )
 
-type ChangeUserUseCase struct {
+type UpdateUserUseCase struct {
 	userRepository userDomain.UserRepository
 }
 
-func NewChangeUserUseCase(userRepository userDomain.UserRepository) *RegistUserUseCase {
+func NewUpdateUserUseCase(userRepository userDomain.UserRepository) *RegistUserUseCase {
 	return &RegistUserUseCase{userRepository: userRepository}
 }
 
-// ユーザー登録
-type ChangeUserUseCaseInputDto struct {
+// ユーザー情報変更
+type UpdateUserUseCaseInputDto struct {
 	id    uuid.UUID
 	name  string
 	email string
 }
 
-func (uc *ChangeUserUseCase) Changer(ctx context.Context, dto ChangeUserUseCaseInputDto) error {
+func (uc *UpdateUserUseCase) Update(ctx context.Context, dto UpdateUserUseCaseInputDto) error {
 	user, err := userDomain.ReconstructUser(dto.id, dto.name, dto.email, time.Now(), time.Now())
 	if err != nil {
 		return err

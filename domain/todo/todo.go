@@ -2,22 +2,27 @@ package todo
 
 import (
 	"time"
-	//"kiravia.com/internship-go-api/domain/user"
+	//userDomain "github.com/KentaroKajiyama/internship-go-api/domain/user"
 	"unicode/utf8"
 
 	errDomain "github.com/KentaroKajiyama/internship-go-api/domain/error"
 )
 
 type Todo struct {
+	id           string
 	todo_id      int
 	title        string
 	description  string
-	term_protect bool
+	is_deletable bool
 	createdAT    time.Time
 	updatedAt    time.Time
 }
 
-func (s *Todo) Id() int {
+func (s *Todo) Id() string {
+	return s.id
+}
+
+func (s *Todo) TodoId() int {
 	return s.todo_id
 }
 
@@ -29,8 +34,8 @@ func (s *Todo) Description() string {
 	return s.description
 }
 
-func (s *Todo) TerminationProtect() bool {
-	return s.term_protect
+func (s *Todo) IsDeletable() bool {
+	return s.is_deletable
 }
 
 func (s *Todo) CreatedAt() time.Time {
@@ -41,7 +46,7 @@ func (s *Todo) UpdatedAt() time.Time {
 	return s.updatedAt
 }
 
-func newTodo(todo_id int, title string, description string, term_protect bool, createdAT time.Time, updatedAt time.Time) (*Todo, error) {
+func newTodo(id string, todo_id int, title string, description string, is_deletable bool, createdAT time.Time, updatedAt time.Time) (*Todo, error) {
 	// バリデーション
 	// タイトルのバリデーション
 	if utf8.RuneCountInString(title) < titleLengthMin && utf8.RuneCountInString(title) > titleLengthMax {
@@ -52,10 +57,11 @@ func newTodo(todo_id int, title string, description string, term_protect bool, c
 		return nil, errDomain.NewError("内容が不正です。")
 	}
 	return &Todo{
+		id:           id,
 		todo_id:      todo_id,
 		title:        title,
 		description:  description,
-		term_protect: term_protect,
+		is_deletable: is_deletable,
 		createdAT:    createdAT,
 		updatedAt:    updatedAt,
 	}, nil
@@ -72,23 +78,25 @@ const (
 )
 
 /* Todo_idをどう決めていくか、とりあえず10にしている */
-func NewUser(title, description string, term_protect bool, createdAt, updatedAt time.Time) (*Todo, error) {
+func NewTodo(id string, title, description string, is_deletable bool, createdAt, updatedAt time.Time) (*Todo, error) {
 	return newTodo(
+		id,
 		10,
 		title,
 		description,
-		term_protect,
+		is_deletable,
 		createdAt,
 		updatedAt,
 	)
 }
 
-func ReconstructUser(todo_id int, title, description string, term_protect bool, createdAt, updatedAt time.Time) (*Todo, error) {
+func ReconstructTodo(id string, todo_id int, title, description string, is_deletable bool, createdAt, updatedAt time.Time) (*Todo, error) {
 	return newTodo(
+		id,
 		todo_id,
 		title,
 		description,
-		term_protect,
+		is_deletable,
 		createdAt,
 		updatedAt,
 	)

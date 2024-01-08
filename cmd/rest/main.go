@@ -4,14 +4,15 @@ import (
 	"context"
 	"errors"
 	"fmt"
-	"github.com/labstack/echo/v4"
-	"github.com/labstack/echo/v4/middleware"
-	"kiravia.com/internship-go-api/config"
-	"kiravia.com/internship-go-api/presentation/rest_user"
 	"net/http"
 	"os"
 	"os/signal"
 	"time"
+
+	"github.com/KentaroKajiyama/internship-go-api/config"
+	"github.com/KentaroKajiyama/internship-go-api/presentation/server/route"
+	"github.com/labstack/echo/v4"
+	"github.com/labstack/echo/v4/middleware"
 )
 
 func main() {
@@ -34,9 +35,10 @@ func main() {
 
 	baseRoute := engine.Group("")
 	v1 := baseRoute.Group("/v1")
-	rest_user.RouteInit(v1)
+	route.InitRoute(v1)
 
 	go func() {
+		//ここでのhttp.ErrServerClosedとengine.Shutdown(ctx)とのつながりがわからない。
 		if err := engine.Start(fmt.Sprintf(":%s", config.Conf.GetPort())); err != nil && !errors.Is(err, http.ErrServerClosed) {
 			engine.Logger.Fatal(err)
 		}
