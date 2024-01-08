@@ -4,9 +4,9 @@
 package todo
 
 import (
-	"github.com/KentaroKajiyama/Internship-go-gpi/application/todo"
-	"github.com/KentaroKajiyama/Internship-go-gpi/infrastructure"
-	"github.com/KentaroKajiyama/Internship-go-gpi/infrastructure/repository"
+	"github.com/KentaroKajiyama/Internship-go-api/application/todo"
+	"github.com/KentaroKajiyama/Internship-go-api/infrastructure"
+	"github.com/KentaroKajiyama/Internship-go-api/infrastructure/repository"
 	"github.com/google/wire"
 )
 
