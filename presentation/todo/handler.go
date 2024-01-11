@@ -18,23 +18,23 @@ func NewTodoHandler() *TodoHandler {
 }
 
 type PostTodosParams struct {
-	ID          string `query:"id"`
+	ID          string `param:"id" query:"id" json:"id" form:"id" `
 	Title       string `json:"title" form:"title" query:"title"`
 	Description string `json:"description" form:"description" query:"description"`
 	IsDeletable bool   `json:"is_deletable" form:"is_deletable" query:"is_deletable"`
 }
 
 type PutTodosParams struct {
-	ID          string `query:"id"`
-	TodoID      int    `query:"todo_id"`
+	ID          string `param:"id" query:"id" json:"id" form:"id"`
+	TodoID      int    `param:"todo_id" query:"todo_id" json:"todo_id" form:"todo_id"`
 	Title       string `json:"title" form:"title" query:"title"`
 	Description string `json:"description" form:"description" query:"description"`
 	IsDeletable bool   `json:"is_deletable" form:"is_deletable" query:"is_deletable"`
 }
 
 type DeleteTodosParams struct {
-	ID          string `query:"id"`
-	TodoID      int    `json:"description" form:"description" query:"description"`
+	ID          string `param:"id" query:"id" json:"id" form:"id"`
+	TodoID      int    `param:"todo_id" query:"todo_id" json:"todo_id" form:"todo_id"`
 	IsDeletable bool   `json:"is_deletable" form:"is_deletable" query:"is_deletable"`
 }
 
@@ -61,12 +61,12 @@ func (h *TodoHandler) PostTodos(ctx echo.Context) error {
 		Description: params.Description,
 		IsDeletable: params.IsDeletable,
 	}
-	// UseCase処理
+	// UseCase処理 ここでdbが挿入される
 	err = todoDi.CreateTodo().Create(ctx.Request().Context(), input_dto)
 	if err != nil {
 		return fmt.Errorf("%w", err)
 	}
-	//レスポンスはなしでいいのか？ Jsonデータを返した方がいいのか？
+	//レスポンスはなしでいいのか？ Jsonデータを返した方がいいのか？作成したデータの確認をするかどうかは
 	return ctx.String(http.StatusOK, "Todo項目を新規作成しました。")
 }
 

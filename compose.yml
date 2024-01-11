@@ -1,0 +1,32 @@
+services:
+  # DB
+  db:
+    image: postgres:latest
+    container_name: postgres
+    volumes:
+      - type: bind
+        source: ./ops/postgres_data
+        target: /var/lib/postgresql/data
+    ports:
+      - "5432:5432"
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+      - POSTGRES_DB=postgres
+  # アプリケーション
+  app:
+    build: 
+      context: .
+      dockerfile: ./ops/docker/app/Dockerfile
+    ports:
+      - "8000:8000"
+    volumes:
+      - type: bind
+        source: ./
+        target: data
+    depends_on:
+      - db
+
+volumes:
+  db-store:
+    driver: local

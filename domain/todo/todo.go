@@ -7,6 +7,7 @@ import (
 	errDomain "github.com/KentaroKajiyama/Internship-go-api/domain/error"
 )
 
+// idは必要か？データベース的には必要だが、ビジネスロジック的には？
 type Todo struct {
 	id          string
 	todoId      int

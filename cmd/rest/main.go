@@ -10,6 +10,7 @@ import (
 	"time"
 
 	"github.com/KentaroKajiyama/Internship-go-api/config"
+	"github.com/KentaroKajiyama/Internship-go-api/infrastructure"
 	"github.com/KentaroKajiyama/Internship-go-api/presentation/server/route"
 	"github.com/labstack/echo/v4"
 	"github.com/labstack/echo/v4/middleware"
@@ -17,11 +18,11 @@ import (
 
 func main() {
 	// ToDo: DockerComposeを利用してdatabaseを作成することができたら、以下のコメントアウトを外す
-	//db := infrastructure.NewGormPostgres()
-	//defer func() {
-	//	d, _ := db.DB()
-	//	d.Close()
-	//}()
+	db := infrastructure.NewGormPostgres()
+	defer func() {
+		d, _ := db.DB()
+		d.Close()
+	}()
 
 	engine := echo.New()
 	engine.Debug = true
