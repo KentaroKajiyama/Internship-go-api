@@ -26,7 +26,7 @@ type PostTodosParams struct {
 
 type PutTodosParams struct {
 	ID          string `param:"id" query:"id" json:"id" form:"id"`
-	TodoID      int    `param:"todo_id" query:"todo_id" json:"todo_id" form:"todo_id"`
+	TodoID      string `param:"todo_id" query:"todo_id" json:"todo_id" form:"todo_id"`
 	Title       string `json:"title" form:"title" query:"title"`
 	Description string `json:"description" form:"description" query:"description"`
 	IsDeletable bool   `json:"is_deletable" form:"is_deletable" query:"is_deletable"`
@@ -34,7 +34,7 @@ type PutTodosParams struct {
 
 type DeleteTodosParams struct {
 	ID          string `param:"id" query:"id" json:"id" form:"id"`
-	TodoID      int    `param:"todo_id" query:"todo_id" json:"todo_id" form:"todo_id"`
+	TodoID      string `param:"todo_id" query:"todo_id" json:"todo_id" form:"todo_id"`
 	IsDeletable bool   `json:"is_deletable" form:"is_deletable" query:"is_deletable"`
 }
 
