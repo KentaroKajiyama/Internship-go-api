@@ -18,7 +18,7 @@ func NewUpdateTodoUseCase(todoRepository todoDomain.TodoRepository) *UpdateTodoU
 // todo項目更新
 type UpdateTodoUseCaseInputDto struct {
 	ID          string
-	TodoID      int
+	TodoID      string
 	Title       string
 	Description string
 	IsDeletable bool

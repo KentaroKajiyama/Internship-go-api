@@ -5,11 +5,12 @@ import (
 	"unicode/utf8"
 
 	errDomain "github.com/KentaroKajiyama/Internship-go-api/domain/error"
+	"github.com/KentaroKajiyama/Internship-go-api/pkg/uuid"
 )
 
 type Tag struct {
 	id        string
-	tag_id    int
+	tag_id    string
 	name      string
 	createdAT time.Time
 	updatedAt time.Time
@@ -19,7 +20,7 @@ func (s *Tag) Id() string {
 	return s.id
 }
 
-func (s *Tag) TagId() int {
+func (s *Tag) TagId() string {
 	return s.tag_id
 }
 
@@ -35,7 +36,7 @@ func (s *Tag) UpdatedAt() time.Time {
 	return s.updatedAt
 }
 
-func newTag(id string, tag_id int, name string, createdAT time.Time, updatedAt time.Time) (*Tag, error) {
+func newTag(id string, tag_id string, name string, createdAT time.Time, updatedAt time.Time) (*Tag, error) {
 	// バリデーション
 	// タイトルのバリデーション
 	if utf8.RuneCountInString(name) < nameLengthMin && utf8.RuneCountInString(name) > nameLengthMax {
@@ -56,18 +57,18 @@ const (
 	nameLengthMax = 255
 )
 
-/* tag_idをどう決めていくか、とりあえず10にしている */
+/* tag_idをどう決めていくか、とりあえず10にしている => uuidで生成する */
 func NewTag(id string, name string, createdAt, updatedAt time.Time) (*Tag, error) {
 	return newTag(
 		id,
-		10,
+		uuid.NewUUID(),
 		name,
 		createdAt,
 		updatedAt,
 	)
 }
 
-func ReconstructTag(id string, tag_id int, name string, createdAt, updatedAt time.Time) (*Tag, error) {
+func ReconstructTag(id string, tag_id string, name string, createdAt, updatedAt time.Time) (*Tag, error) {
 	return newTag(
 		id,
 		tag_id,

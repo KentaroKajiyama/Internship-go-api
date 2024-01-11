@@ -16,7 +16,7 @@ func NewTodoRepository(db *gorm.DB) todoDomain.TodoRepository {
 	return &todoRepository{db: db}
 }
 
-func (r *todoRepository) Find(ctx context.Context, id string, todo_id int) (*todoDomain.Todo, error) {
+func (r *todoRepository) Find(ctx context.Context, id string, todo_id string) (*todoDomain.Todo, error) {
 	conn := r.db.WithContext(ctx)
 	var todoModel model.Todo
 	var todoDomainPtr *todoDomain.Todo

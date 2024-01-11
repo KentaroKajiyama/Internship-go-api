@@ -5,12 +5,13 @@ import (
 	"unicode/utf8"
 
 	errDomain "github.com/KentaroKajiyama/Internship-go-api/domain/error"
+	"github.com/KentaroKajiyama/Internship-go-api/pkg/uuid"
 )
 
 // idは必要か？データベース的には必要だが、ビジネスロジック的には？
 type Todo struct {
 	id          string
-	todoId      int
+	todoId      string
 	title       string
 	description string
 	isDeletable bool
@@ -22,7 +23,7 @@ func (s *Todo) Id() string {
 	return s.id
 }
 
-func (s *Todo) TodoId() int {
+func (s *Todo) TodoId() string {
 	return s.todoId
 }
 
@@ -46,7 +47,7 @@ func (s *Todo) UpdatedAt() time.Time {
 	return s.updatedAt
 }
 
-func newTodo(id string, todoId int, title string, description string, isDeletable bool, createdAT time.Time, updatedAt time.Time) (*Todo, error) {
+func newTodo(id string, todoId string, title string, description string, isDeletable bool, createdAT time.Time, updatedAt time.Time) (*Todo, error) {
 	// バリデーション
 	// タイトルのバリデーション
 	if utf8.RuneCountInString(title) < titleLengthMin && utf8.RuneCountInString(title) > titleLengthMax {
@@ -77,11 +78,11 @@ const (
 	descriptionLengthMax = 1000
 )
 
-/* Todo_idをどう決めていくか、とりあえず10にしている */
+/* Todo_idをどう決めていくか、とりあえず10にしている => uuidで生成することにする */
 func NewTodo(id string, title, description string, isDeletable bool, createdAt, updatedAt time.Time) (*Todo, error) {
 	return newTodo(
 		id,
-		10,
+		uuid.NewUUID(),
 		title,
 		description,
 		isDeletable,
@@ -90,7 +91,7 @@ func NewTodo(id string, title, description string, isDeletable bool, createdAt, 
 	)
 }
 
-func ReconstructTodo(id string, todoId int, title, description string, isDeletable bool, createdAt, updatedAt time.Time) (*Todo, error) {
+func ReconstructTodo(id string, todoId string, title, description string, isDeletable bool, createdAt, updatedAt time.Time) (*Todo, error) {
 	return newTodo(
 		id,
 		todoId,
