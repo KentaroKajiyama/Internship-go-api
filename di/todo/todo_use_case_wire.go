@@ -20,17 +20,17 @@ var provideSetCreate = wire.NewSet(
 	// //auth.NewAuthMock2Client,
 
 	// Repository
-	repository.NewTodoRepository,
+	repository.NewToDoRepository,
 
 	// queryService
 
 	// domainService
 
 	// useCase
-	todo.NewCreateTodoUseCase,
+	todo.NewCreateToDoUseCase,
 )
 
-func CreateTodo() *todo.CreateTodoUseCase {
+func CreateToDo() *todo.CreateToDoUseCase {
 	wire.Build(
 		provideSetCreate,
 	)
@@ -47,21 +47,21 @@ var provideSetDelete = wire.NewSet(
 	// //auth.NewAuthMock2Client,
 
 	// Repository
-	repository.NewTodoRepository,
+	repository.NewToDoRepository,
 
 	// queryService
 
 	// domainService
 
 	// useCase
-	todo.NewDeleteTodoUseCase,
+	todo.NewDeleteToDoUseCase,
 )
 
-func DeleteTodo() *todo.DeleteTodoUseCase {
+func DeleteToDo() *todo.DeleteToDoUseCase {
 	wire.Build(
 		provideSetDelete,
 	)
-	return &todo.DeleteTodoUseCase{}
+	return &todo.DeleteToDoUseCase{}
 }
 
 var provideSetUpdate = wire.NewSet(
@@ -74,19 +74,19 @@ var provideSetUpdate = wire.NewSet(
 	// //auth.NewAuthMock2Client,
 
 	// Repository
-	repository.NewTodoRepository,
+	repository.NewToDoRepository,
 
 	// queryService
 
 	// domainService
 
 	// useCase
-	todo.NewUpdateTodoUseCase,
+	todo.NewUpdateToDoUseCase,
 )
 
-func UpdateTodo() *todo.UpdateTodoUseCase {
+func UpdateToDo() *todo.UpdateToDoUseCase {
 	wire.Build(
 		provideSetUpdate,
 	)
-	return &todo.UpdateTodoUseCase{}
+	return &todo.UpdateToDoUseCase{}
 }

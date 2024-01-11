@@ -20,9 +20,9 @@ func InitRoute(routeGroup *echo.Group) {
 // }
 
 func todoRoute(routeGroup *echo.Group) {
-	h := todoPre.NewTodoHandler()
+	h := todoPre.NewToDoHandler()
 	todos := routeGroup.Group("/todos")
-	todos.POST("/", h.PostTodos)
-	todos.PUT("/:todo_id", h.PutTodos)
-	todos.DELETE("/:todo_id", h.DeleteTodos)
+	todos.POST("/", h.PostToDos)
+	todos.PUT("/:todo_id", h.PutToDos)
+	todos.DELETE("/:todo_id", h.DeleteToDos)
 }

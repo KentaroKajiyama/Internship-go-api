@@ -4,9 +4,9 @@ import (
 	"context"
 )
 
-type TodoRepository interface {
-	Find(ctx context.Context, id string, todo_id string) (*Todo, error)
-	Create(ctx context.Context, Todo *Todo) error
-	Update(ctx context.Context, Todo *Todo) error
-	Delete(ctx context.Context, Todo *Todo) error
+type ToDoRepository interface {
+	Find(ctx context.Context, id string, todo_id string) (*ToDo, error)
+	Create(ctx context.Context, ToDo *ToDo) error
+	Update(ctx context.Context, ToDo *ToDo) error
+	Delete(ctx context.Context, ToDo *ToDo) error
 }

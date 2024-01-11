@@ -10,40 +10,40 @@ import (
 	"github.com/labstack/echo/v4"
 )
 
-type TodoHandler struct {
+type ToDoHandler struct {
 }
 
-func NewTodoHandler() *TodoHandler {
-	return &TodoHandler{}
+func NewToDoHandler() *ToDoHandler {
+	return &ToDoHandler{}
 }
 
-type PostTodosParams struct {
+type PostToDosParams struct {
 	ID          string `param:"id" query:"id" json:"id" form:"id" `
 	Title       string `json:"title" form:"title" query:"title"`
 	Description string `json:"description" form:"description" query:"description"`
 	IsDeletable bool   `json:"is_deletable" form:"is_deletable" query:"is_deletable"`
 }
 
-type PutTodosParams struct {
+type PutToDosParams struct {
 	ID          string `param:"id" query:"id" json:"id" form:"id"`
-	TodoID      string `param:"todo_id" query:"todo_id" json:"todo_id" form:"todo_id"`
+	ToDoID      string `param:"todo_id" query:"todo_id" json:"todo_id" form:"todo_id"`
 	Title       string `json:"title" form:"title" query:"title"`
 	Description string `json:"description" form:"description" query:"description"`
 	IsDeletable bool   `json:"is_deletable" form:"is_deletable" query:"is_deletable"`
 }
 
-type DeleteTodosParams struct {
+type DeleteToDosParams struct {
 	ID          string `param:"id" query:"id" json:"id" form:"id"`
-	TodoID      string `param:"todo_id" query:"todo_id" json:"todo_id" form:"todo_id"`
+	ToDoID      string `param:"todo_id" query:"todo_id" json:"todo_id" form:"todo_id"`
 	IsDeletable bool   `json:"is_deletable" form:"is_deletable" query:"is_deletable"`
 }
 
 // Post 新規作成
 // dtoの部分をどうするか？とりあえず、wireは使わずに直感的に書いてみる
 // 一度に一つしかtodo項目が作成されない想定
-func (h *TodoHandler) PostTodos(ctx echo.Context) error {
+func (h *ToDoHandler) PostToDos(ctx echo.Context) error {
 	// リクエストパラメーター取得
-	var params PostTodosParams
+	var params PostToDosParams
 	err := ctx.Bind(&params)
 	if err != nil {
 		return echo.NewHTTPError(http.StatusBadRequest, err.Error())
@@ -55,14 +55,14 @@ func (h *TodoHandler) PostTodos(ctx echo.Context) error {
 		return echo.NewHTTPError(http.StatusBadRequest, err.Error())
 	}
 	//  Presentation -> UseCase
-	input_dto := todoApp.CreateTodoUseCaseInputDto{
+	input_dto := todoApp.CreateToDoUseCaseInputDto{
 		ID:          params.ID,
 		Title:       params.Title,
 		Description: params.Description,
 		IsDeletable: params.IsDeletable,
 	}
 	// UseCase処理 ここでdbが挿入される
-	err = todoDi.CreateTodo().Create(ctx.Request().Context(), input_dto)
+	err = todoDi.CreateToDo().Create(ctx.Request().Context(), input_dto)
 	if err != nil {
 		return fmt.Errorf("%w", err)
 	}
@@ -73,9 +73,9 @@ func (h *TodoHandler) PostTodos(ctx echo.Context) error {
 // PUT 更新
 // dtoの部分をどうするか？とりあえず、wireは使わずに直感的に書いてみる
 // 一度に一つしかtodo項目が更新されない想定
-func (h *TodoHandler) PutTodos(ctx echo.Context) error {
+func (h *ToDoHandler) PutToDos(ctx echo.Context) error {
 	// リクエストパラメーター取得
-	var params PutTodosParams
+	var params PutToDosParams
 	err := ctx.Bind(&params)
 	if err != nil {
 		return ctx.String(http.StatusBadRequest, "bad request")
@@ -87,15 +87,15 @@ func (h *TodoHandler) PutTodos(ctx echo.Context) error {
 		return ctx.String(http.StatusBadRequest, "bad request")
 	}
 	//  Presentation -> UseCase
-	input_dto := todoApp.UpdateTodoUseCaseInputDto{
+	input_dto := todoApp.UpdateToDoUseCaseInputDto{
 		ID:          params.ID,
-		TodoID:      params.TodoID,
+		TodoID:      params.ToDoID,
 		Title:       params.Title,
 		Description: params.Description,
 		IsDeletable: params.IsDeletable,
 	}
 	// UseCase処理
-	err = todoDi.UpdateTodo().Update(ctx.Request().Context(), input_dto)
+	err = todoDi.UpdateToDo().Update(ctx.Request().Context(), input_dto)
 	if err != nil {
 		return fmt.Errorf("%w", err)
 	}
@@ -106,9 +106,9 @@ func (h *TodoHandler) PutTodos(ctx echo.Context) error {
 // DELETE 削除
 // dtoの部分をどうするか？とりあえず、wireは使わずに直感的に書いてみる
 // 一度に一つしかtodo項目が削除されない想定？流石に削除は複数個まとめたい。
-func (h *TodoHandler) DeleteTodos(ctx echo.Context) error {
+func (h *ToDoHandler) DeleteToDos(ctx echo.Context) error {
 	// リクエストパラメーター取得
-	var params DeleteTodosParams
+	var params DeleteToDosParams
 	err := ctx.Bind(&params)
 	if err != nil {
 		return ctx.String(http.StatusBadRequest, "bad request")
@@ -120,16 +120,16 @@ func (h *TodoHandler) DeleteTodos(ctx echo.Context) error {
 		return ctx.String(http.StatusBadRequest, "bad request")
 	}
 	//  Presentation -> UseCase
-	input_dto := todoApp.DeleteTodoUseCaseInputDto{
+	input_dto := todoApp.DeleteToDoUseCaseInputDto{
 		ID:          params.ID,
-		TodoID:      params.TodoID,
+		TodoID:      params.ToDoID,
 		IsDeletable: params.IsDeletable,
 	}
 	// UseCase処理
-	err = todoDi.DeleteTodo().Delete(ctx.Request().Context(), input_dto)
+	err = todoDi.DeleteToDo().Delete(ctx.Request().Context(), input_dto)
 	if err != nil {
 		return fmt.Errorf("%w", err)
 	}
 	//レスポンスはなしでいいのか？
-	return ctx.String(http.StatusOK, "Todo項目を削除しました。")
+	return ctx.String(http.StatusOK, "ToDo項目を削除しました。")
 }

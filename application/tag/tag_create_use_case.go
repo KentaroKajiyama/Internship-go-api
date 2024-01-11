@@ -2,7 +2,6 @@ package tag
 
 import (
 	"context"
-	"time"
 
 	tagDomain "github.com/KentaroKajiyama/Internship-go-api/domain/tag"
 )
@@ -23,7 +22,7 @@ type RegistTagUseCaseInputDto struct {
 
 // 新規項目を作成してリポジトリに登録する。
 func (uc *RegistTagUseCase) Register(ctx context.Context, dto RegistTagUseCaseInputDto) error {
-	user, err := tagDomain.NewTag(dto.ID, dto.Title, time.Now(), time.Now())
+	user, err := tagDomain.NewTag(dto.ID, dto.Title)
 	if err != nil {
 		return err
 	}

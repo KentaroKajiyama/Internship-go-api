@@ -2,6 +2,7 @@ package tag
 
 import (
 	"context"
+	"time"
 
 	tagDomain "github.com/KentaroKajiyama/Internship-go-api/domain/tag"
 )
@@ -16,8 +17,9 @@ func NewDeleteTagUseCase(tagRepository tagDomain.TagRepository) *DeleteTagUseCas
 
 // todo項目削除
 type DeleteTagUseCaseInputDto struct {
-	ID    string
-	TagID int
+	ID        string
+	TagID     int
+	CreatedAt time.Time
 }
 
 // 特定の項目を削除する

@@ -10,18 +10,18 @@ import (
 
 type Tag struct {
 	id        string
-	tag_id    string
+	tagID     string
 	name      string
-	createdAT time.Time
+	createdAt time.Time
 	updatedAt time.Time
 }
 
-func (s *Tag) Id() string {
+func (s *Tag) ID() string {
 	return s.id
 }
 
-func (s *Tag) TagId() string {
-	return s.tag_id
+func (s *Tag) TagID() string {
+	return s.tagID
 }
 
 func (s *Tag) Name() string {
@@ -29,24 +29,32 @@ func (s *Tag) Name() string {
 }
 
 func (s *Tag) CreatedAt() time.Time {
-	return s.createdAT
+	return s.createdAt
 }
 
 func (s *Tag) UpdatedAt() time.Time {
 	return s.updatedAt
 }
 
-func newTag(id string, tag_id string, name string, createdAT time.Time, updatedAt time.Time) (*Tag, error) {
+func newTag(id string, tagID string, name string, createdAt time.Time, updatedAt time.Time) (*Tag, error) {
 	// バリデーション
+	// idのバリデーション
+	if !uuid.IsValid(id) {
+		return nil, errDomain.NewError("UserIDが不正です。")
+	}
+	// ToDoIDのバリデーション
+	if !uuid.IsValid(tagID) {
+		return nil, errDomain.NewError("TagIDが不正です。")
+	}
 	// タイトルのバリデーション
-	if utf8.RuneCountInString(name) < nameLengthMin && utf8.RuneCountInString(name) > nameLengthMax {
+	if utf8.RuneCountInString(name) < nameLengthMin || utf8.RuneCountInString(name) > nameLengthMax {
 		return nil, errDomain.NewError("タイトルが不正です。")
 	}
 	return &Tag{
 		id:        id,
-		tag_id:    tag_id,
+		tagID:     tagID,
 		name:      name,
-		createdAT: createdAT,
+		createdAt: createdAt,
 		updatedAt: updatedAt,
 	}, nil
 }
@@ -58,22 +66,22 @@ const (
 )
 
 /* tag_idをどう決めていくか、とりあえず10にしている => uuidで生成する */
-func NewTag(id string, name string, createdAt, updatedAt time.Time) (*Tag, error) {
+func NewTag(id string, name string) (*Tag, error) {
 	return newTag(
 		id,
 		uuid.NewUUID(),
 		name,
-		createdAt,
-		updatedAt,
+		time.Now(),
+		time.Now(),
 	)
 }
 
-func ReconstructTag(id string, tag_id string, name string, createdAt, updatedAt time.Time) (*Tag, error) {
+func ReconstructTag(id string, tagID string, name string, updatedAt time.Time) (*Tag, error) {
 	return newTag(
 		id,
-		tag_id,
+		tagID,
 		name,
-		createdAt,
+		time.Now(),
 		updatedAt,
 	)
 }

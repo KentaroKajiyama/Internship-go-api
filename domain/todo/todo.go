@@ -1,6 +1,7 @@
 package todo
 
 import (
+	"reflect"
 	"time"
 	"unicode/utf8"
 
@@ -9,61 +10,73 @@ import (
 )
 
 // idは必要か？データベース的には必要だが、ビジネスロジック的には？
-type Todo struct {
+type ToDo struct {
 	id          string
-	todoId      string
+	todoID      string
 	title       string
 	description string
 	isDeletable bool
-	createdAT   time.Time
+	createdAt   time.Time
 	updatedAt   time.Time
 }
 
-func (s *Todo) Id() string {
+func (s *ToDo) Id() string {
 	return s.id
 }
 
-func (s *Todo) TodoId() string {
-	return s.todoId
+func (s *ToDo) ToDoId() string {
+	return s.todoID
 }
 
-func (s *Todo) Title() string {
+func (s *ToDo) Title() string {
 	return s.title
 }
 
-func (s *Todo) Description() string {
+func (s *ToDo) Description() string {
 	return s.description
 }
 
-func (s *Todo) IsDeletable() bool {
+func (s *ToDo) IsDeletable() bool {
 	return s.isDeletable
 }
 
-func (s *Todo) CreatedAt() time.Time {
-	return s.createdAT
+func (s *ToDo) CreatedAt() time.Time {
+	return s.createdAt
 }
 
-func (s *Todo) UpdatedAt() time.Time {
+func (s *ToDo) UpdatedAt() time.Time {
 	return s.updatedAt
 }
 
-func newTodo(id string, todoId string, title string, description string, isDeletable bool, createdAT time.Time, updatedAt time.Time) (*Todo, error) {
+func newToDo(id string, todoID string, title string, description string, isDeletable bool, createdAt time.Time, updatedAt time.Time) (*ToDo, error) {
 	// バリデーション
+	// idのバリデーション
+	if !uuid.IsValid(id) {
+		return nil, errDomain.NewError("UserIDが不正です。")
+	}
+	// ToDoIDのバリデーション
+	if !uuid.IsValid(todoID) {
+		return nil, errDomain.NewError("ToDoIDが不正です。")
+	}
 	// タイトルのバリデーション
-	if utf8.RuneCountInString(title) < titleLengthMin && utf8.RuneCountInString(title) > titleLengthMax {
+	if utf8.RuneCountInString(title) < titleLengthMin || utf8.RuneCountInString(title) > titleLengthMax {
 		return nil, errDomain.NewError("タイトルが不正です。")
 	}
 	// 内容のバリデーション
-	if utf8.RuneCountInString(description) < descriptionLengthMin && utf8.RuneCountInString(description) > descriptionLengthMax {
+	if utf8.RuneCountInString(description) < descriptionLengthMin || utf8.RuneCountInString(description) > descriptionLengthMax {
 		return nil, errDomain.NewError("内容が不正です。")
 	}
-	return &Todo{
+	// 削除保護フラグのバリデーション
+	if reflect.TypeOf(isDeletable).Kind() != reflect.Bool {
+		return nil, errDomain.NewError("削除保護フラグが不正です。")
+	}
+	return &ToDo{
 		id:          id,
-		todoId:      todoId,
+		todoID:      todoID,
 		title:       title,
 		description: description,
 		isDeletable: isDeletable,
-		createdAT:   createdAT,
+		createdAt:   createdAt,
 		updatedAt:   updatedAt,
 	}, nil
 }
@@ -78,27 +91,27 @@ const (
 	descriptionLengthMax = 1000
 )
 
-/* Todo_idをどう決めていくか、とりあえず10にしている => uuidで生成することにする */
-func NewTodo(id string, title, description string, isDeletable bool, createdAt, updatedAt time.Time) (*Todo, error) {
-	return newTodo(
+/* ToDo_idをどう決めていくか、とりあえず10にしている => uuidで生成することにする */
+func NewToDo(id string, title, description string, isDeletable bool) (*ToDo, error) {
+	return newToDo(
 		id,
 		uuid.NewUUID(),
 		title,
 		description,
 		isDeletable,
-		createdAt,
-		updatedAt,
+		time.Now(),
+		time.Now(),
 	)
 }
 
-func ReconstructTodo(id string, todoId string, title, description string, isDeletable bool, createdAt, updatedAt time.Time) (*Todo, error) {
-	return newTodo(
+func ReconstructToDo(id string, todoID string, title, description string, isDeletable bool, createdAt time.Time) (*ToDo, error) {
+	return newToDo(
 		id,
-		todoId,
+		todoID,
 		title,
 		description,
 		isDeletable,
 		createdAt,
-		updatedAt,
+		time.Now(),
 	)
 }

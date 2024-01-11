@@ -5,12 +5,16 @@ import (
 )
 
 func (s *User) ToDomainUser() (*userDomain.User, error) {
-	return userDomain.NewUser(s.Name, s.Email, s.CreatedAt, s.UpdatedAt)
+	if s.CreatedAt.IsZero() {
+		return userDomain.NewUser(s.Name, s.Email)
+	} else {
+		return userDomain.ReconstructUser(s.ID, s.Name, s.Email, s.CreatedAt)
+	}
 }
 
 func NewUserFromDomainUser(user *userDomain.User) User {
 	return User{
-		Id:        user.Id(),
+		ID:        user.Id(),
 		Name:      user.Name(),
 		Email:     user.Email(),
 		CreatedAt: user.CreatedAt(),

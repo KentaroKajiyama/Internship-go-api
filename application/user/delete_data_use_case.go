@@ -17,13 +17,14 @@ func NewDeleteUserUseCase(userRepository userDomain.UserRepository) *RegistUserU
 
 // ユーザー登録
 type DeleteUserUseCaseInputDto struct {
-	ID    string
-	Name  string
-	Email string
+	ID        string
+	Name      string
+	Email     string
+	CreatedAt time.Time
 }
 
 func (uc *UpdateUserUseCase) Delete(ctx context.Context, dto DeleteUserUseCaseInputDto) error {
-	user, err := userDomain.ReconstructUser(dto.ID, dto.Name, dto.Email, time.Now(), time.Now())
+	user, err := userDomain.ReconstructUser(dto.ID, dto.Name, dto.Email, dto.CreatedAt)
 	if err != nil {
 		return err
 	}

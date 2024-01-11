@@ -7,23 +7,23 @@ import (
 	todoDomain "github.com/KentaroKajiyama/Internship-go-api/domain/todo"
 )
 
-type DeleteTodoUseCase struct {
-	todoRepository todoDomain.TodoRepository
+type DeleteToDoUseCase struct {
+	todoRepository todoDomain.ToDoRepository
 }
 
-func NewDeleteTodoUseCase(todoRepository todoDomain.TodoRepository) *DeleteTodoUseCase {
-	return &DeleteTodoUseCase{todoRepository: todoRepository}
+func NewDeleteToDoUseCase(todoRepository todoDomain.ToDoRepository) *DeleteToDoUseCase {
+	return &DeleteToDoUseCase{todoRepository: todoRepository}
 }
 
 // todo項目削除
-type DeleteTodoUseCaseInputDto struct {
+type DeleteToDoUseCaseInputDto struct {
 	ID          string
-	TodoID      int
+	TodoID      string
 	IsDeletable bool
 }
 
 // 新規項目を作成してリポジトリに登録する
-func (uc *DeleteTodoUseCase) Delete(ctx context.Context, dto DeleteTodoUseCaseInputDto) error {
+func (uc *DeleteToDoUseCase) Delete(ctx context.Context, dto DeleteToDoUseCaseInputDto) error {
 	todo, err := uc.todoRepository.Find(ctx, dto.ID, dto.TodoID)
 	if err != nil {
 		return err

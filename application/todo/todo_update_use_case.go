@@ -7,26 +7,27 @@ import (
 	todoDomain "github.com/KentaroKajiyama/Internship-go-api/domain/todo"
 )
 
-type UpdateTodoUseCase struct {
-	todoRepository todoDomain.TodoRepository
+type UpdateToDoUseCase struct {
+	todoRepository todoDomain.ToDoRepository
 }
 
-func NewUpdateTodoUseCase(todoRepository todoDomain.TodoRepository) *UpdateTodoUseCase {
-	return &UpdateTodoUseCase{todoRepository: todoRepository}
+func NewUpdateToDoUseCase(todoRepository todoDomain.ToDoRepository) *UpdateToDoUseCase {
+	return &UpdateToDoUseCase{todoRepository: todoRepository}
 }
 
 // todo項目更新
-type UpdateTodoUseCaseInputDto struct {
+type UpdateToDoUseCaseInputDto struct {
 	ID          string
 	TodoID      string
 	Title       string
 	Description string
 	IsDeletable bool
+	CreatedAT   time.Time
 }
 
 // 特定の項目を変更してリポジトリに登録する
-func (uc *UpdateTodoUseCase) Update(ctx context.Context, dto UpdateTodoUseCaseInputDto) error {
-	todo, err := todoDomain.ReconstructTodo(dto.ID, dto.TodoID, dto.Title, dto.Description, dto.IsDeletable, time.Now(), time.Now())
+func (uc *UpdateToDoUseCase) Update(ctx context.Context, dto UpdateToDoUseCaseInputDto) error {
+	todo, err := todoDomain.ReconstructToDo(dto.ID, dto.TodoID, dto.Title, dto.Description, dto.IsDeletable, dto.CreatedAT)
 	if err != nil {
 		return err
 	}

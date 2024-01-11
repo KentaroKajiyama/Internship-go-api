@@ -5,26 +5,26 @@ import (
 )
 
 type User struct {
-	Id        string `gorm:"primaryKey"`
+	ID        string `gorm:"primaryKey"`
 	Name      string
 	Email     string
 	CreatedAt time.Time
 	UpdatedAt time.Time
 }
 
-type Todo struct {
-	Id          string `gorm:"primaryKey"`
-	TodoId      string `gorm:"primaryKey"`
+type ToDo struct {
+	ID          string `gorm:"primaryKey"`
+	ToDoID      string `gorm:"primaryKey"`
 	Title       string
-	Text        string
+	Description string
 	IsDeletable bool
 	CreatedAt   time.Time
 	UpdatedAt   time.Time
 }
 
 type Tag struct {
-	Id        string `gorm:"primaryKey"`
-	TagId     string `gorm:"primaryKey"`
+	ID        string `gorm:"primaryKey"`
+	TagID     string `gorm:"primaryKey"`
 	Name      string
 	CreatedAt time.Time
 	UpdatedAt time.Time

@@ -5,6 +5,7 @@ import (
 	"unicode/utf8"
 
 	errDomain "github.com/KentaroKajiyama/Internship-go-api/domain/error"
+	"github.com/KentaroKajiyama/Internship-go-api/pkg/uuid"
 )
 
 type User struct {
@@ -36,10 +37,10 @@ func (s *User) UpdatedAt() time.Time {
 }
 
 func newUser(id string, name string, email string, createdAt time.Time, updatedAt time.Time) (*User, error) {
-	// IDのバリデーション（必要ないかも）
-	// if err := uuid.Validate(id); err != nil {
-	// 	return nil, err
-	// }
+	// idのバリデーション
+	if !uuid.IsValid(id) {
+		return nil, errDomain.NewError("UserIDが不正です。")
+	}
 	// 名前のバリデーション
 	if utf8.RuneCountInString(name) < nameLengthMin {
 		return nil, errDomain.NewError("ユーザー名が不正です。")
@@ -66,22 +67,22 @@ const (
 	emailLengthMin = 1
 )
 
-func NewUser(name, email string, createdAt, updatedAt time.Time) (*User, error) {
+func NewUser(name, email string) (*User, error) {
 	return newUser(
-		"hoge",
+		uuid.NewUUID(),
 		name,
 		email,
-		createdAt,
-		updatedAt,
+		time.Now(),
+		time.Now(),
 	)
 }
 
-func ReconstructUser(id string, name, email string, createdAt, updatedAt time.Time) (*User, error) {
+func ReconstructUser(id string, name, email string, createdAt time.Time) (*User, error) {
 	return newUser(
 		id,
 		name,
 		email,
 		createdAt,
-		updatedAt,
+		time.Now(),
 	)
 }
