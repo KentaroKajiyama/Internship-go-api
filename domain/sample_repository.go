@@ -1,5 +1,6 @@
 package domain
 
+/*
 import (
 	"context"
 
@@ -10,3 +11,4 @@ type ISampleRepository interface {
 	FindById(ctx context.Context, id string) (*entity.Sample, error)
 	Save(ctx context.Context, sample entity.Sample) (*entity.Sample, error)
 }
+*/

@@ -1,5 +1,6 @@
 package rest_user
 
+/*
 import "github.com/labstack/echo/v4"
 
 func RouteInit(routeGroup *echo.Group) {
@@ -12,3 +13,4 @@ func RouteInit(routeGroup *echo.Group) {
 	}
 
 }
+*/

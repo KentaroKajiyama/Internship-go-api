@@ -1,5 +1,6 @@
 package rest_user
 
+/*
 import (
 	"fmt"
 	"net/http"
@@ -21,3 +22,4 @@ func (h PingHandler) Ping(ctx echo.Context) error {
 
 	return ctx.String(http.StatusOK, result)
 }
+*/

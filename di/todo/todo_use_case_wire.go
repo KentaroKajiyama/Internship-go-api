@@ -10,6 +10,28 @@ import (
 	"github.com/google/wire"
 )
 
+var provideSetFind = wire.NewSet(
+	// driver
+	infrastructure.NewGormPostgres,
+
+	// Repository
+	repository.NewToDoRepository,
+
+	// queryService
+
+	// domainService
+
+	// useCase
+	todo.NewFindToDoUseCase,
+)
+
+func FindToDo() *todo.FindToDoUseCase {
+	wire.Build(
+		provideSetFind,
+	)
+	return nil
+}
+
 var provideSetCreate = wire.NewSet(
 	// driver
 	infrastructure.NewGormPostgres,

@@ -17,6 +17,11 @@ func NewToDoHandler() *ToDoHandler {
 	return &ToDoHandler{}
 }
 
+type GetToDosParams struct {
+	ID     string `param:"id" query:"id" json:"id" form:"id"`
+	ToDoID string `param:"todo_id" query:"todo_id" json:"todo_id" form:"todo_id"`
+}
+
 type PostToDosParams struct {
 	ID          string `param:"id" query:"id" json:"id" form:"id" `
 	Title       string `json:"title" form:"title" query:"title"`
@@ -38,8 +43,35 @@ type DeleteToDosParams struct {
 	IsDeletable bool   `json:"is_deletable" form:"is_deletable" query:"is_deletable"`
 }
 
+// Get ToDo項目の参照
+func (h *ToDoHandler) GetToDo(ctx echo.Context) error {
+	//リクエスパラメーター取得
+	var params GetToDosParams
+	err := ctx.Bind(&params)
+	if err != nil {
+		return echo.NewHTTPError(http.StatusBadRequest, err.Error())
+	}
+	//バリデーション（上のerrorハンドリングとはどう違うのか）
+	validate := validator.GetValidator()
+	err = validate.Struct(params)
+	if err != nil {
+		return echo.NewHTTPError(http.StatusBadRequest, err.Error())
+	}
+	//  Presentation -> UseCase
+	input_dto := todoApp.FindToDoUseCaseInputDto{
+		ID:     params.ID,
+		ToDoID: params.ToDoID,
+	}
+	// UseCase処理
+	todo, err := todoDi.FindToDo().Find(ctx.Request().Context(), input_dto)
+	if err != nil {
+		return fmt.Errorf("%w", err)
+	}
+	//レスポンスはなしでいいのか？
+	return ctx.JSON(http.StatusOK, todo)
+}
+
 // Post 新規作成
-// dtoの部分をどうするか？とりあえず、wireは使わずに直感的に書いてみる
 // 一度に一つしかtodo項目が作成されない想定
 func (h *ToDoHandler) PostToDos(ctx echo.Context) error {
 	// リクエストパラメーター取得

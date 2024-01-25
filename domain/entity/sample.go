@@ -1,5 +1,6 @@
 package entity
 
+/*
 import "time"
 
 type Sample struct {
@@ -33,3 +34,4 @@ func NewSample(id string, name string, createdAt time.Time, updatedAt time.Time)
 		updatedAt: updatedAt,
 	}
 }
+*/
