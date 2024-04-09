@@ -1,8 +1,9 @@
+# 開発用
 services:
   # DB
   db:
     image: postgres:latest
-    container_name: postgres
+    container_name: postgres_DB
     volumes:
       - type: bind
         source: ./ops/postgres_data
@@ -13,19 +14,27 @@ services:
       - POSTGRES_USER=postgres
       - POSTGRES_PASSWORD=postgres
       - POSTGRES_DB=postgres
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres -d postgres"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
   # アプリケーション
   app:
     build: 
       context: .
       dockerfile: ./ops/docker/app/Dockerfile
+    container_name: golang_api
     ports:
       - "8000:8000"
     volumes:
-      - type: bind
-        source: ./
-        target: data
+      - ./:/app
     depends_on:
-      - db
+      db:
+        condition: service_healthy
+    environment:
+      - DATABASE_URL=postgresql://postgres/postgres@db:5432/postgres
 
 volumes:
   db-store:

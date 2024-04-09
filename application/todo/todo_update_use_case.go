@@ -2,34 +2,32 @@ package todo
 
 import (
 	"context"
-	"time"
 
 	todoDomain "github.com/KentaroKajiyama/Internship-go-api/domain/todo"
 )
 
-type UpdateToDoUseCase struct {
-	todoRepository todoDomain.ToDoRepository
+type UpdateTodoUseCase struct {
+	todoRepository todoDomain.TodoRepository
 }
 
-func NewUpdateToDoUseCase(todoRepository todoDomain.ToDoRepository) *UpdateToDoUseCase {
-	return &UpdateToDoUseCase{todoRepository: todoRepository}
+func NewUpdateTodoUseCase(todoRepository todoDomain.TodoRepository) *UpdateTodoUseCase {
+	return &UpdateTodoUseCase{todoRepository: todoRepository}
 }
 
 // todo項目更新
-type UpdateToDoUseCaseInputDto struct {
-	ID          string
-	TodoID      string
+type UpdateTodoUseCaseInputDto struct {
+	Id          string
+	TodoId      string
 	Title       string
 	Description string
 	IsDeletable bool
-	CreatedAT   time.Time
 }
 
 // 特定の項目を変更してリポジトリに登録する
-func (uc *UpdateToDoUseCase) Update(ctx context.Context, dto UpdateToDoUseCaseInputDto) error {
-	todo, err := todoDomain.ReconstructToDo(dto.ID, dto.TodoID, dto.Title, dto.Description, dto.IsDeletable, dto.CreatedAT)
+func (uc *UpdateTodoUseCase) Update(ctx context.Context, dto UpdateTodoUseCaseInputDto) (*todoDomain.Todo, error) {
+	todo, err := todoDomain.NewTodoWithoutTime(dto.Id, dto.TodoId, dto.Title, dto.Description, dto.IsDeletable)
 	if err != nil {
-		return err
+		return nil, err
 	}
 	return uc.todoRepository.Update(ctx, todo)
 }

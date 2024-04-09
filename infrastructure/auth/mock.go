@@ -1,18 +1,18 @@
 package auth
 
-import (
-	"context"
+// import (
+// 	"context"
 
-	"github.com/KentaroKajiyama/Internship-go-api/domain"
-)
+// 	"github.com/KentaroKajiyama/Internship-go-api/domain"
+// )
 
-type mock struct {
-}
+// type mock struct {
+// }
 
-func (a mock) VerifyToken(ctx context.Context, token string) (string, error) {
-	return token, nil
-}
+// func (a mock) VerifyToken(ctx context.Context, token string) (string, error) {
+// 	return token, nil
+// }
 
-func NewAuthMockClient() domain.AuthClient {
-	return &mock{}
-}
+// func NewAuthMockClient() domain.AuthClient {
+// 	return &mock{}
+// }

@@ -2,7 +2,6 @@ package user
 
 import (
 	"context"
-	"time"
 
 	userDomain "github.com/KentaroKajiyama/Internship-go-api/domain/user"
 )
@@ -11,22 +10,21 @@ type DeleteUserUseCase struct {
 	userRepository userDomain.UserRepository
 }
 
-func NewDeleteUserUseCase(userRepository userDomain.UserRepository) *RegistUserUseCase {
-	return &RegistUserUseCase{userRepository: userRepository}
+func NewDeleteUserUseCase(userRepository userDomain.UserRepository) *DeleteUserUseCase {
+	return &DeleteUserUseCase{userRepository: userRepository}
 }
 
 // ユーザー登録
 type DeleteUserUseCaseInputDto struct {
-	ID        string
-	Name      string
-	Email     string
-	CreatedAt time.Time
+	Id    string
+	Name  string
+	Email string
 }
 
-func (uc *UpdateUserUseCase) Delete(ctx context.Context, dto DeleteUserUseCaseInputDto) error {
-	user, err := userDomain.ReconstructUser(dto.ID, dto.Name, dto.Email, dto.CreatedAt)
+func (uc *DeleteUserUseCase) Delete(ctx context.Context, dto DeleteUserUseCaseInputDto) (*userDomain.User, error) {
+	user, err := userDomain.NewUserWithoutTime(dto.Id, dto.Name, dto.Email)
 	if err != nil {
-		return err
+		return nil, err
 	}
 	return uc.userRepository.Delete(ctx, user)
 }

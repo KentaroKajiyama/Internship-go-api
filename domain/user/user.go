@@ -67,22 +67,32 @@ const (
 	emailLengthMin = 1
 )
 
-func NewUser(name, email string) (*User, error) {
-	return newUser(
-		uuid.NewUUID(),
-		name,
-		email,
-		time.Now(),
-		time.Now(),
-	)
-}
-
-func ReconstructUser(id string, name, email string, createdAt time.Time) (*User, error) {
+func NewUser(id, name, email string, createdAt, updatedAt time.Time) (*User, error) {
 	return newUser(
 		id,
 		name,
 		email,
 		createdAt,
-		time.Now(),
+		updatedAt,
+	)
+}
+
+func NewUserWithoutTime(id string, name, email string) (*User, error) {
+	return newUser(
+		id,
+		name,
+		email,
+		time.Time{},
+		time.Time{},
+	)
+}
+
+func NewUserWithoutIdAndTime(name, email string) (*User, error) {
+	return newUser(
+		uuid.NewUUID(),
+		name,
+		email,
+		time.Time{},
+		time.Time{},
 	)
 }

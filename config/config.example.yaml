@@ -1,17 +1,18 @@
 app:
-  env: local
+  # env: local
   #  env: testing
-  #  env: development
+  env: development
   #  env: staging
   #  env: production
   mock_auth: true
-  name: internship-server
+  name: golang_api
   is_maintenance_mode: false
   skip_maintenance_mode_token: xxxxxxxxxxxxxxxxxxxxxxxxxxx
-  port: 8888
+  port: 8000
 db:
-  user: xxxxxxxx
-  password: xxxxxxxx
-  host: xxxxxxxx
-  name: xxxxxxxx
+  user: kajiyamakentarou
+  password: postgres
+  host: 127.0.0.1
+  name: postgres
   port: 5432
+  schema: go_api

@@ -12,7 +12,7 @@ import (
 //go:embed config.example.yaml
 var configYaml []byte
 
-//go:embed google_credentials.example.json
+//go:embed todo-auth-8385b-firebase-adminsdk-ea7yh-cb36b4c7e1.json
 var googleCredentialsJson []byte
 
 var Conf *config
@@ -32,6 +32,7 @@ type config struct {
 		Password string `mapstructure:"password"`
 		Host     string `mapstructure:"host"`
 		Name     string `mapstructure:"name"`
+		Schema   string `mapstructure:"schema"`
 		Port     string `mapstructure:"port"`
 	} `mapstructure:"db"`
 	Google struct {

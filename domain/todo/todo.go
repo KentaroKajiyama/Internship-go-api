@@ -10,9 +10,9 @@ import (
 )
 
 // idは必要か？データベース的には必要だが、ビジネスロジック的には？
-type ToDo struct {
+type Todo struct {
 	id          string
-	todoID      string
+	todoId      string
 	title       string
 	description string
 	isDeletable bool
@@ -20,43 +20,43 @@ type ToDo struct {
 	updatedAt   time.Time
 }
 
-func (s *ToDo) Id() string {
+func (s *Todo) Id() string {
 	return s.id
 }
 
-func (s *ToDo) ToDoId() string {
-	return s.todoID
+func (s *Todo) TodoId() string {
+	return s.todoId
 }
 
-func (s *ToDo) Title() string {
+func (s *Todo) Title() string {
 	return s.title
 }
 
-func (s *ToDo) Description() string {
+func (s *Todo) Description() string {
 	return s.description
 }
 
-func (s *ToDo) IsDeletable() bool {
+func (s *Todo) IsDeletable() bool {
 	return s.isDeletable
 }
 
-func (s *ToDo) CreatedAt() time.Time {
+func (s *Todo) CreatedAt() time.Time {
 	return s.createdAt
 }
 
-func (s *ToDo) UpdatedAt() time.Time {
+func (s *Todo) UpdatedAt() time.Time {
 	return s.updatedAt
 }
 
-func newToDo(id string, todoID string, title string, description string, isDeletable bool, createdAt time.Time, updatedAt time.Time) (*ToDo, error) {
+func newTodo(id string, todoId string, title string, description string, isDeletable bool, createdAt time.Time, updatedAt time.Time) (*Todo, error) {
 	// バリデーション
 	// idのバリデーション
 	if !uuid.IsValid(id) {
-		return nil, errDomain.NewError("UserIDが不正です。")
+		return nil, errDomain.NewError("UserIdが不正です。")
 	}
 	// ToDoIDのバリデーション
-	if !uuid.IsValid(todoID) {
-		return nil, errDomain.NewError("ToDoIDが不正です。")
+	if !uuid.IsValid(todoId) {
+		return nil, errDomain.NewError("TodoIdが不正です。")
 	}
 	// タイトルのバリデーション
 	if utf8.RuneCountInString(title) < titleLengthMin || utf8.RuneCountInString(title) > titleLengthMax {
@@ -70,9 +70,9 @@ func newToDo(id string, todoID string, title string, description string, isDelet
 	if reflect.TypeOf(isDeletable).Kind() != reflect.Bool {
 		return nil, errDomain.NewError("削除保護フラグが不正です。")
 	}
-	return &ToDo{
+	return &Todo{
 		id:          id,
-		todoID:      todoID,
+		todoId:      todoId,
 		title:       title,
 		description: description,
 		isDeletable: isDeletable,
@@ -92,26 +92,38 @@ const (
 )
 
 /* ToDo_idをどう決めていくか、とりあえず10にしている => uuidで生成することにする */
-func NewToDo(id string, title, description string, isDeletable bool) (*ToDo, error) {
-	return newToDo(
+func NewTodo(id, todoId, title, description string, isDeletable bool, createdAt, updatedAt time.Time) (*Todo, error) {
+	return newTodo(
+		id,
+		todoId,
+		title,
+		description,
+		isDeletable,
+		createdAt,
+		updatedAt,
+	)
+}
+
+func NewTodoWithoutTime(id, todoId, title, description string, isDeletable bool) (*Todo, error) {
+	return newTodo(
+		id,
+		todoId,
+		title,
+		description,
+		isDeletable,
+		time.Time{},
+		time.Time{},
+	)
+}
+
+func NewTodoWithoutTodoIdAndTime(id, title, description string, isDeletable bool) (*Todo, error) {
+	return newTodo(
 		id,
 		uuid.NewUUID(),
 		title,
 		description,
 		isDeletable,
-		time.Now(),
-		time.Now(),
-	)
-}
-
-func ReconstructToDo(id string, todoID string, title, description string, isDeletable bool, createdAt time.Time) (*ToDo, error) {
-	return newToDo(
-		id,
-		todoID,
-		title,
-		description,
-		isDeletable,
-		createdAt,
-		time.Now(),
+		time.Time{},
+		time.Time{},
 	)
 }

@@ -8,7 +8,10 @@ go-install:
 	go install github.com/pressly/goose/v3/cmd/goose@latest
 
 wire-gen:
-	wire ./di/container.go
+	# wire ./di/container.go
+	wire ./di/tag/tag_use_case_wire.go
+	wire ./di/todo/todo_use_case_wire.go
+	wire ./di/user/user_use_case_wire.go
 
 migrate-status:
 	goose --dir ./migrations status

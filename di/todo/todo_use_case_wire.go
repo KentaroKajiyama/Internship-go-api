@@ -15,19 +15,35 @@ var provideSetFind = wire.NewSet(
 	infrastructure.NewGormPostgres,
 
 	// Repository
-	repository.NewToDoRepository,
+	repository.NewTodoRepository,
 
 	// queryService
 
 	// domainService
 
 	// useCase
-	todo.NewFindToDoUseCase,
+	todo.NewFindTodoUseCase,
 )
 
-func FindToDo() *todo.FindToDoUseCase {
+func FindTodo() *todo.FindTodoUseCase {
 	wire.Build(
 		provideSetFind,
+	)
+	return nil
+}
+
+var provideSetFindMultiple = wire.NewSet(
+	//driver
+	infrastructure.NewGormPostgres,
+	//Repository
+	repository.NewTodoRepository,
+	//usecase
+	todo.NewFindTodosUseCase,
+)
+
+func FindTodos() *todo.FindTodosUseCase {
+	wire.Build(
+		provideSetFindMultiple,
 	)
 	return nil
 }
@@ -42,17 +58,17 @@ var provideSetCreate = wire.NewSet(
 	// //auth.NewAuthMock2Client,
 
 	// Repository
-	repository.NewToDoRepository,
+	repository.NewTodoRepository,
 
 	// queryService
 
 	// domainService
 
 	// useCase
-	todo.NewCreateToDoUseCase,
+	todo.NewCreateTodoUseCase,
 )
 
-func CreateToDo() *todo.CreateToDoUseCase {
+func CreateTodo() *todo.CreateTodoUseCase {
 	wire.Build(
 		provideSetCreate,
 	)
@@ -69,21 +85,21 @@ var provideSetDelete = wire.NewSet(
 	// //auth.NewAuthMock2Client,
 
 	// Repository
-	repository.NewToDoRepository,
+	repository.NewTodoRepository,
 
 	// queryService
 
 	// domainService
 
 	// useCase
-	todo.NewDeleteToDoUseCase,
+	todo.NewDeleteTodoUseCase,
 )
 
-func DeleteToDo() *todo.DeleteToDoUseCase {
+func DeleteTodo() *todo.DeleteTodoUseCase {
 	wire.Build(
 		provideSetDelete,
 	)
-	return &todo.DeleteToDoUseCase{}
+	return nil
 }
 
 var provideSetUpdate = wire.NewSet(
@@ -96,19 +112,19 @@ var provideSetUpdate = wire.NewSet(
 	// //auth.NewAuthMock2Client,
 
 	// Repository
-	repository.NewToDoRepository,
+	repository.NewTodoRepository,
 
 	// queryService
 
 	// domainService
 
 	// useCase
-	todo.NewUpdateToDoUseCase,
+	todo.NewUpdateTodoUseCase,
 )
 
-func UpdateToDo() *todo.UpdateToDoUseCase {
+func UpdateTodo() *todo.UpdateTodoUseCase {
 	wire.Build(
 		provideSetUpdate,
 	)
-	return &todo.UpdateToDoUseCase{}
+	return nil
 }

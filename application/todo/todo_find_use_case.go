@@ -6,23 +6,23 @@ import (
 	todoDomain "github.com/KentaroKajiyama/Internship-go-api/domain/todo"
 )
 
-type FindToDoUseCase struct {
-	todoRepository todoDomain.ToDoRepository
+type FindTodoUseCase struct {
+	todoRepository todoDomain.TodoRepository
 }
 
-func NewFindToDoUseCase(todoRepository todoDomain.ToDoRepository) *FindToDoUseCase {
-	return &FindToDoUseCase{todoRepository: todoRepository}
+func NewFindTodoUseCase(todoRepository todoDomain.TodoRepository) *FindTodoUseCase {
+	return &FindTodoUseCase{todoRepository: todoRepository}
 }
 
 // todo項目検索
-
-type FindToDoUseCaseInputDto struct {
-	ID     string
-	ToDoID string
+// データベース・フロントエンドからの受け皿
+type FindTodoUseCaseInputDto struct {
+	Id     string
+	TodoId string
 }
 
-func (uc *FindToDoUseCase) Find(ctx context.Context, dto FindToDoUseCaseInputDto) (*todoDomain.ToDo, error) {
-	todo, err := uc.todoRepository.Find(ctx, dto.ID, dto.ToDoID)
+func (uc *FindTodoUseCase) Find(ctx context.Context, dto FindTodoUseCaseInputDto) (*todoDomain.Todo, error) {
+	todo, err := uc.todoRepository.Find(ctx, dto.Id, dto.TodoId)
 	if err != nil {
 		return nil, err
 	}

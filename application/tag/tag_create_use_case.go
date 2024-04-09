@@ -6,25 +6,26 @@ import (
 	tagDomain "github.com/KentaroKajiyama/Internship-go-api/domain/tag"
 )
 
-type RegistTagUseCase struct {
+type CreateTagUseCase struct {
 	tagRepository tagDomain.TagRepository
 }
 
-func NewRegistTagUseCase(tagRepository tagDomain.TagRepository) *RegistTagUseCase {
-	return &RegistTagUseCase{tagRepository: tagRepository}
+func NewCreateTagUseCase(tagRepository tagDomain.TagRepository) *CreateTagUseCase {
+	return &CreateTagUseCase{tagRepository: tagRepository}
 }
 
 // tag項目新規作成
-type RegistTagUseCaseInputDto struct {
-	ID    string
-	Title string
+type CreateTagUseCaseInputDto struct {
+	Id   string
+	Name string
 }
 
-// 新規項目を作成してリポジトリに登録する。
-func (uc *RegistTagUseCase) Register(ctx context.Context, dto RegistTagUseCaseInputDto) error {
-	user, err := tagDomain.NewTag(dto.ID, dto.Title)
+// 新規項目を作成してリポジトリに登録する。作成して永続化って感じだからIDの生成はドメイン層でもいいかも
+func (uc *CreateTagUseCase) Create(ctx context.Context, dto CreateTagUseCaseInputDto) (*tagDomain.Tag, error) {
+	// 自動インクリメントの時にここのTagIDをどうするか？→ゼロ値の0に設定
+	user, err := tagDomain.NewTagFirst(dto.Id, 0, dto.Name)
 	if err != nil {
-		return err
+		return nil, err
 	}
 	return uc.tagRepository.Create(ctx, user)
 }

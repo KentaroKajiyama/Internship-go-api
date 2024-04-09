@@ -5,19 +5,13 @@ import (
 )
 
 func (s *Tag) ToDomainTag() (*tagDomain.Tag, error) {
-	if s.CreatedAt.IsZero() {
-		return tagDomain.NewTag(s.ID, s.Name)
-	} else {
-		return tagDomain.ReconstructTag(s.ID, s.TagID, s.Name, s.CreatedAt)
-	}
+	return tagDomain.NewTag(s.Id, s.TagId, s.Name, s.CreatedAt, s.UpdatedAt)
 }
 
 func NewTagFromDomainTag(tag *tagDomain.Tag) Tag {
 	return Tag{
-		ID:        tag.ID(),
-		TagID:     tag.TagID(),
-		Name:      tag.Name(),
-		CreatedAt: tag.CreatedAt(),
-		UpdatedAt: tag.UpdatedAt(),
+		Id:    tag.Id(),
+		TagId: tag.TagId(),
+		Name:  tag.Name(),
 	}
 }

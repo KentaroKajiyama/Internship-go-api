@@ -23,3 +23,8 @@ COPY ./go.sum /go/src
 RUN go mod download
 
 COPY ./ /go/src
+
+RUN go build -o /go/bin/app /go/src/cmd/rest/main.go
+
+CMD ["/go/bin/app"]
+

@@ -6,24 +6,25 @@ import (
 	userDomain "github.com/KentaroKajiyama/Internship-go-api/domain/user"
 )
 
-type RegistUserUseCase struct {
+type SignUpUserUseCase struct {
 	userRepository userDomain.UserRepository
 }
 
-func NewRegistUserUseCase(userRepository userDomain.UserRepository) *RegistUserUseCase {
-	return &RegistUserUseCase{userRepository: userRepository}
+func NewSignUpUserUseCase(userRepository userDomain.UserRepository) *SignUpUserUseCase {
+	return &SignUpUserUseCase{userRepository: userRepository}
 }
 
 // ユーザー登録
-type RegistUserUseCaseInputDto struct {
+type SignUpUserUseCaseInputDto struct {
 	Name  string
 	Email string
 }
 
-func (uc *RegistUserUseCase) Register(ctx context.Context, dto RegistUserUseCaseInputDto) error {
-	user, err := userDomain.NewUser(dto.Name, dto.Email)
+func (uc *SignUpUserUseCase) SignUp(ctx context.Context, dto SignUpUserUseCaseInputDto) (*userDomain.User, error) {
+	// 名前とemailが被っていたら作れないようにしたい。
+	user, err := userDomain.NewUserWithoutIdAndTime(dto.Name, dto.Email)
 	if err != nil {
-		return err
+		return nil, err
 	}
 	return uc.userRepository.Create(ctx, user)
 }

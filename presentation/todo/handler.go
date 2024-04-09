@@ -6,162 +6,207 @@ import (
 
 	todoApp "github.com/KentaroKajiyama/Internship-go-api/application/todo"
 	todoDi "github.com/KentaroKajiyama/Internship-go-api/di/todo"
-	"github.com/KentaroKajiyama/Internship-go-api/pkg/validator"
 	"github.com/labstack/echo/v4"
 )
 
-type ToDoHandler struct {
+type TodoHandler struct {
 }
 
-func NewToDoHandler() *ToDoHandler {
-	return &ToDoHandler{}
+func NewTodoHandler() *TodoHandler {
+	return &TodoHandler{}
 }
 
-type GetToDosParams struct {
-	ID     string `param:"id" query:"id" json:"id" form:"id"`
-	ToDoID string `param:"todo_id" query:"todo_id" json:"todo_id" form:"todo_id"`
-}
-
-type PostToDosParams struct {
-	ID          string `param:"id" query:"id" json:"id" form:"id" `
-	Title       string `json:"title" form:"title" query:"title"`
-	Description string `json:"description" form:"description" query:"description"`
-	IsDeletable bool   `json:"is_deletable" form:"is_deletable" query:"is_deletable"`
-}
-
-type PutToDosParams struct {
-	ID          string `param:"id" query:"id" json:"id" form:"id"`
-	ToDoID      string `param:"todo_id" query:"todo_id" json:"todo_id" form:"todo_id"`
-	Title       string `json:"title" form:"title" query:"title"`
-	Description string `json:"description" form:"description" query:"description"`
-	IsDeletable bool   `json:"is_deletable" form:"is_deletable" query:"is_deletable"`
-}
-
-type DeleteToDosParams struct {
-	ID          string `param:"id" query:"id" json:"id" form:"id"`
-	ToDoID      string `param:"todo_id" query:"todo_id" json:"todo_id" form:"todo_id"`
-	IsDeletable bool   `json:"is_deletable" form:"is_deletable" query:"is_deletable"`
-}
-
-// Get ToDo項目の参照
-func (h *ToDoHandler) GetToDo(ctx echo.Context) error {
-	//リクエスパラメーター取得
-	var params GetToDosParams
+// Get Todo項目（１つ）の参照
+func (h *TodoHandler) GetTodo(ctx echo.Context) error {
+	//リクエストパラメーター取得（リクエストのボディに対するエラーハンドリング→データ型や形式等が合っているか？）
+	var params GetTodoParams
 	err := ctx.Bind(&params)
 	if err != nil {
 		return echo.NewHTTPError(http.StatusBadRequest, err.Error())
 	}
-	//バリデーション（上のerrorハンドリングとはどう違うのか）
-	validate := validator.GetValidator()
-	err = validate.Struct(params)
-	if err != nil {
+	//バリデーション（上のerrorハンドリングとはどう違うのか→データの内容が特定のバリデーションルールに違反していないか？文字数や書き方など）
+	if err = ctx.Validate(params); err != nil {
 		return echo.NewHTTPError(http.StatusBadRequest, err.Error())
 	}
 	//  Presentation -> UseCase
-	input_dto := todoApp.FindToDoUseCaseInputDto{
-		ID:     params.ID,
-		ToDoID: params.ToDoID,
+	input_dto := todoApp.FindTodoUseCaseInputDto{
+		Id:     params.Id,
+		TodoId: params.TodoId,
 	}
 	// UseCase処理
-	todo, err := todoDi.FindToDo().Find(ctx.Request().Context(), input_dto)
+	todo, err := todoDi.FindTodo().Find(ctx.Request().Context(), input_dto)
 	if err != nil {
 		return fmt.Errorf("%w", err)
 	}
-	//レスポンスはなしでいいのか？
-	return ctx.JSON(http.StatusOK, todo)
+	// UseCase → Presentation
+	response := TodosResponseModel{
+		Id:          todo.Id(),
+		TodoId:      todo.TodoId(),
+		Title:       todo.Title(),
+		Description: todo.Description(),
+		IsDeletable: todo.IsDeletable(),
+		CreatedAt:   todo.CreatedAt(),
+		UpdatedAt:   todo.UpdatedAt(),
+	}
+	//レスポンス。JSON形式でいいのか？
+	return ctx.JSON(http.StatusOK, response)
+}
+
+// GET Todo項目（複数）の参照
+func (h *TodoHandler) GetTodos(ctx echo.Context) error {
+	//リクエストパラメーター取得（リクエストのボディに対するエラーハンドリング→データ型や形式等が合っているか？）
+	var params GetTodosParams
+	var trm TodosResponseModel
+	var response []TodosResponseModel
+	err := ctx.Bind(&params)
+	if err != nil {
+		return echo.NewHTTPError(http.StatusBadRequest, err.Error())
+	}
+	//バリデーション（上のerrorハンドリングとはどう違うのか→データの内容が特定のバリデーションルールに違反していないか？文字数や書き方など）
+	if err = ctx.Validate(params); err != nil {
+		return echo.NewHTTPError(http.StatusBadRequest, err.Error())
+	}
+	//  Presentation -> UseCase
+	input_dto := todoApp.FindTodosUseCaseInputDto{
+		Id:     ctx.Get("id").(string),
+		TodoId: params.TodoId,
+		Title:  params.Title,
+	}
+	// UseCase処理
+	todos, err := todoDi.FindTodos().FindMultiple(ctx.Request().Context(), input_dto)
+	if err != nil {
+		return fmt.Errorf("%w", err)
+	}
+	// UseCase → Presentation
+	for _, todo := range todos {
+		trm = TodosResponseModel{
+			Id:          todo.Id(),
+			TodoId:      todo.TodoId(),
+			Title:       todo.Title(),
+			Description: todo.Description(),
+			IsDeletable: todo.IsDeletable(),
+			CreatedAt:   todo.CreatedAt(),
+			UpdatedAt:   todo.UpdatedAt(),
+		}
+		response = append(response, trm)
+	}
+	//レスポンス。JSON形式でいいのか？
+	return ctx.JSON(http.StatusOK, response)
 }
 
 // Post 新規作成
 // 一度に一つしかtodo項目が作成されない想定
-func (h *ToDoHandler) PostToDos(ctx echo.Context) error {
+func (h *TodoHandler) PostTodos(ctx echo.Context) error {
 	// リクエストパラメーター取得
-	var params PostToDosParams
+	var params PostTodosParams
 	err := ctx.Bind(&params)
 	if err != nil {
 		return echo.NewHTTPError(http.StatusBadRequest, err.Error())
 	}
 	//バリデーション（上のerrorハンドリングとはどう違うのか）
-	validate := validator.GetValidator()
-	err = validate.Struct(params)
-	if err != nil {
+	if err = ctx.Validate(params); err != nil {
 		return echo.NewHTTPError(http.StatusBadRequest, err.Error())
 	}
 	//  Presentation -> UseCase
-	input_dto := todoApp.CreateToDoUseCaseInputDto{
-		ID:          params.ID,
+	input_dto := todoApp.CreateTodoUseCaseInputDto{
+		Id:          params.Id,
 		Title:       params.Title,
 		Description: params.Description,
 		IsDeletable: params.IsDeletable,
 	}
 	// UseCase処理 ここでdbが挿入される
-	err = todoDi.CreateToDo().Create(ctx.Request().Context(), input_dto)
+	todo, err := todoDi.CreateTodo().Create(ctx.Request().Context(), input_dto)
 	if err != nil {
 		return fmt.Errorf("%w", err)
 	}
-	//レスポンスはなしでいいのか？ Jsonデータを返した方がいいのか？作成したデータの確認をするかどうかは
-	return ctx.String(http.StatusOK, "Todo項目を新規作成しました。")
+	// UseCase → Presentation
+	response := TodosResponseModel{
+		Id:          todo.Id(),
+		TodoId:      todo.TodoId(),
+		Title:       todo.Title(),
+		Description: todo.Description(),
+		IsDeletable: todo.IsDeletable(),
+		CreatedAt:   todo.CreatedAt(),
+		UpdatedAt:   todo.UpdatedAt(),
+	}
+	//レスポンス。JSON形式でいいのか？
+	return ctx.JSON(http.StatusOK, response)
 }
 
 // PUT 更新
-// dtoの部分をどうするか？とりあえず、wireは使わずに直感的に書いてみる
 // 一度に一つしかtodo項目が更新されない想定
-func (h *ToDoHandler) PutToDos(ctx echo.Context) error {
+func (h *TodoHandler) PutTodos(ctx echo.Context) error {
 	// リクエストパラメーター取得
-	var params PutToDosParams
+	var params PutTodosParams
 	err := ctx.Bind(&params)
 	if err != nil {
 		return ctx.String(http.StatusBadRequest, "bad request")
 	}
 	//バリデーション（上のerrorハンドリングとはどう違うのか）
-	validate := validator.GetValidator()
-	err = validate.Struct(params)
-	if err != nil {
-		return ctx.String(http.StatusBadRequest, "bad request")
+	if err = ctx.Validate(params); err != nil {
+		return echo.NewHTTPError(http.StatusBadRequest, err.Error())
 	}
 	//  Presentation -> UseCase
-	input_dto := todoApp.UpdateToDoUseCaseInputDto{
-		ID:          params.ID,
-		TodoID:      params.ToDoID,
+	input_dto := todoApp.UpdateTodoUseCaseInputDto{
+		Id:          params.Id,
+		TodoId:      params.TodoId,
 		Title:       params.Title,
 		Description: params.Description,
 		IsDeletable: params.IsDeletable,
 	}
 	// UseCase処理
-	err = todoDi.UpdateToDo().Update(ctx.Request().Context(), input_dto)
+	todo, err := todoDi.UpdateTodo().Update(ctx.Request().Context(), input_dto)
 	if err != nil {
 		return fmt.Errorf("%w", err)
 	}
-	//レスポンスはなしでいいのか？
-	return ctx.String(http.StatusOK, "Todo項目を更新しました。")
+	// UseCase → Presentation
+	response := TodosResponseModel{
+		Id:          todo.Id(),
+		TodoId:      todo.TodoId(),
+		Title:       todo.Title(),
+		Description: todo.Description(),
+		IsDeletable: todo.IsDeletable(),
+		CreatedAt:   todo.CreatedAt(),
+		UpdatedAt:   todo.UpdatedAt(),
+	}
+	//レスポンス。JSON形式でいいのか？
+	return ctx.JSON(http.StatusOK, response)
 }
 
 // DELETE 削除
-// dtoの部分をどうするか？とりあえず、wireは使わずに直感的に書いてみる
 // 一度に一つしかtodo項目が削除されない想定？流石に削除は複数個まとめたい。
-func (h *ToDoHandler) DeleteToDos(ctx echo.Context) error {
+func (h *TodoHandler) DeleteTodos(ctx echo.Context) error {
 	// リクエストパラメーター取得
-	var params DeleteToDosParams
+	var params DeleteTodosParams
 	err := ctx.Bind(&params)
 	if err != nil {
 		return ctx.String(http.StatusBadRequest, "bad request")
 	}
 	//バリデーション（上のerrorハンドリングとはどう違うのか）
-	validate := validator.GetValidator()
-	err = validate.Struct(params)
-	if err != nil {
-		return ctx.String(http.StatusBadRequest, "bad request")
+	if err = ctx.Validate(params); err != nil {
+		return echo.NewHTTPError(http.StatusBadRequest, err.Error())
 	}
 	//  Presentation -> UseCase
-	input_dto := todoApp.DeleteToDoUseCaseInputDto{
-		ID:          params.ID,
-		TodoID:      params.ToDoID,
+	input_dto := todoApp.DeleteTodoUseCaseInputDto{
+		Id:          params.Id,
+		TodoId:      params.TodoId,
 		IsDeletable: params.IsDeletable,
 	}
 	// UseCase処理
-	err = todoDi.DeleteToDo().Delete(ctx.Request().Context(), input_dto)
+	todo, err := todoDi.DeleteTodo().Delete(ctx.Request().Context(), input_dto)
 	if err != nil {
 		return fmt.Errorf("%w", err)
 	}
-	//レスポンスはなしでいいのか？
-	return ctx.String(http.StatusOK, "ToDo項目を削除しました。")
+	// UseCase → Presentation
+	response := TodosResponseModel{
+		Id:          todo.Id(),
+		TodoId:      todo.TodoId(),
+		Title:       todo.Title(),
+		Description: todo.Description(),
+		IsDeletable: todo.IsDeletable(),
+		CreatedAt:   todo.CreatedAt(),
+		UpdatedAt:   todo.UpdatedAt(),
+	}
+	//レスポンス。JSON形式でいいのか？
+	return ctx.JSON(http.StatusOK, response)
 }

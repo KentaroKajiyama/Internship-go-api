@@ -4,22 +4,17 @@ import (
 	todoDomain "github.com/KentaroKajiyama/Internship-go-api/domain/todo"
 )
 
-func (s *ToDo) ToDomainToDo() (*todoDomain.ToDo, error) {
-	if s.CreatedAt.IsZero() {
-		return todoDomain.NewToDo(s.ID, s.Title, s.Description, s.IsDeletable)
-	} else {
-		return todoDomain.ReconstructToDo(s.ID, s.ToDoID, s.Title, s.Description, s.IsDeletable, s.CreatedAt)
-	}
+func (s *Todo) ToDomainTodo() (*todoDomain.Todo, error) {
+	//元々作成ずみ（データベースに存在していたデータ）の確認はタイムスタンプでいいのか？
+	return todoDomain.NewTodo(s.Id, s.TodoId, s.Title, s.Description, s.IsDeletable, s.CreatedAt, s.UpdatedAt)
 }
 
-func NewToDoFromDomainToDo(todo *todoDomain.ToDo) *ToDo {
-	return &ToDo{
-		ID:          todo.Id(),
-		ToDoID:      todo.ToDoId(),
+func NewTodoFromDomainTodo(todo *todoDomain.Todo) *Todo {
+	return &Todo{
+		Id:          todo.Id(),
+		TodoId:      todo.TodoId(),
 		Title:       todo.Title(),
 		Description: todo.Description(),
 		IsDeletable: todo.IsDeletable(),
-		CreatedAt:   todo.CreatedAt(),
-		UpdatedAt:   todo.UpdatedAt(),
 	}
 }

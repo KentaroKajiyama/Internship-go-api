@@ -48,5 +48,5 @@ func NewGormPostgres() *gorm.DB {
 }
 
 func getDbDsn() string {
-	return fmt.Sprintf("host=%s user=%s password=%s dbname=%s port=%s sslmode=disable TimeZone=UTC", config.Conf.Db.Host, config.Conf.Db.User, config.Conf.Db.Password, config.Conf.Db.Name, config.Conf.Db.Port)
+	return fmt.Sprintf("host=%s user=%s password=%s dbname=%s options=--search_path=%s port=%s sslmode=disable TimeZone=UTC", config.Conf.Db.Host, config.Conf.Db.User, config.Conf.Db.Password, config.Conf.Db.Name, config.Conf.Db.Schema, config.Conf.Db.Port)
 }

@@ -10,18 +10,18 @@ import (
 
 type Tag struct {
 	id        string
-	tagID     string
+	tagId     uint
 	name      string
 	createdAt time.Time
 	updatedAt time.Time
 }
 
-func (s *Tag) ID() string {
+func (s *Tag) Id() string {
 	return s.id
 }
 
-func (s *Tag) TagID() string {
-	return s.tagID
+func (s *Tag) TagId() uint {
+	return s.tagId
 }
 
 func (s *Tag) Name() string {
@@ -36,23 +36,21 @@ func (s *Tag) UpdatedAt() time.Time {
 	return s.updatedAt
 }
 
-func newTag(id string, tagID string, name string, createdAt time.Time, updatedAt time.Time) (*Tag, error) {
+func newTag(id string, tagId uint, name string, createdAt time.Time, updatedAt time.Time) (*Tag, error) {
 	// バリデーション
 	// idのバリデーション
 	if !uuid.IsValid(id) {
 		return nil, errDomain.NewError("UserIDが不正です。")
 	}
-	// ToDoIDのバリデーション
-	if !uuid.IsValid(tagID) {
-		return nil, errDomain.NewError("TagIDが不正です。")
-	}
+	// TagIDのバリデーション（必要になったら書く）
+
 	// タイトルのバリデーション
 	if utf8.RuneCountInString(name) < nameLengthMin || utf8.RuneCountInString(name) > nameLengthMax {
 		return nil, errDomain.NewError("タイトルが不正です。")
 	}
 	return &Tag{
 		id:        id,
-		tagID:     tagID,
+		tagId:     tagId,
 		name:      name,
 		createdAt: createdAt,
 		updatedAt: updatedAt,
@@ -65,23 +63,41 @@ const (
 	nameLengthMax = 255
 )
 
-/* tag_idをどう決めていくか、とりあえず10にしている => uuidで生成する */
-func NewTag(id string, name string) (*Tag, error) {
+/* tag_idをどう決めていくか→データベースで自動インクリメント*/
+func NewTag(id string, tagId uint, name string, createdAt time.Time, updatedAt time.Time) (*Tag, error) {
 	return newTag(
 		id,
-		uuid.NewUUID(),
+		tagId,
 		name,
-		time.Now(),
-		time.Now(),
-	)
-}
-
-func ReconstructTag(id string, tagID string, name string, updatedAt time.Time) (*Tag, error) {
-	return newTag(
-		id,
-		tagID,
-		name,
-		time.Now(),
+		createdAt,
 		updatedAt,
 	)
 }
+
+func NewTagFirst(id string, tagId uint, name string) (*Tag, error) {
+	return newTag(
+		id,
+		tagId,
+		name,
+		time.Time{},
+		time.Time{},
+	)
+}
+
+func NewTagWithoutTime(id string, tagId uint, name string) (*Tag, error) {
+	return newTag(
+		id,
+		tagId,
+		name,
+		time.Time{},
+		time.Time{},
+	)
+}
+
+// func ReconstructTag(id string, tagID uint, name string) (*Tag, error) {
+// 	return newTag(
+// 		id,
+// 		tagID,
+// 		name,
+// 	)
+// }

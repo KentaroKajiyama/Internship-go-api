@@ -1,27 +1,27 @@
 package model
 
-import (
-	"time"
+// import (
+// 	"time"
 
-	"github.com/KentaroKajiyama/Internship-go-api/domain/entity"
-)
+// 	"github.com/KentaroKajiyama/Internship-go-api/domain/entity"
+// )
 
-type Sample struct {
-	Id        string `gorm:"primaryKey"`
-	Name      string
-	CreatedAt time.Time
-	UpdatedAt time.Time
-}
+// type Sample struct {
+// 	Id        string `gorm:"primaryKey"`
+// 	Name      string
+// 	CreatedAt time.Time
+// 	UpdatedAt time.Time
+// }
 
-func (s *Sample) ToEntity() entity.Sample {
-	return entity.NewSample(s.Id, s.Name, s.CreatedAt, s.UpdatedAt)
-}
+// func (s *Sample) ToEntity() entity.Sample {
+// 	return entity.NewSample(s.Id, s.Name, s.CreatedAt, s.UpdatedAt)
+// }
 
-func NewSampleFromEntity(sample entity.Sample) Sample {
-	return Sample{
-		Id:        sample.Id(),
-		Name:      sample.Name(),
-		CreatedAt: sample.CreatedAt(),
-		UpdatedAt: sample.UpdatedAt(),
-	}
-}
+// func NewSampleFromEntity(sample entity.Sample) Sample {
+// 	return Sample{
+// 		Id:        sample.Id(),
+// 		Name:      sample.Name(),
+// 		CreatedAt: sample.CreatedAt(),
+// 		UpdatedAt: sample.UpdatedAt(),
+// 	}
+// }
