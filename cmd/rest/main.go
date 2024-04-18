@@ -41,25 +41,21 @@ func main() {
 	engine := echo.New()
 	engine.Debug = true
 	engine.Validator = validator.NewValidator()
-	// I didn't understand CORS well enough.
+	// I haven't understand CORS well enough.
 	engine.Use(middleware.CORSWithConfig(middleware.CORSConfig{
 		AllowOrigins: []string{"http://localhost:3000"}, // or your specific set of origins
 		AllowMethods: []string{http.MethodGet, http.MethodPut, http.MethodPost, http.MethodDelete},
-		AllowHeaders: []string{echo.HeaderOrigin, echo.HeaderContentType, echo.HeaderAccept},
+		AllowHeaders: []string{echo.HeaderOrigin, echo.HeaderContentType, echo.HeaderAccept, "Authorization"},
 	}))
-
 	//ここで最後に認証をかます
 	engine.Pre(middleware.RemoveTrailingSlash())
 	engine.Use(middleware.Recover())
 	engine.GET("", func(ctx echo.Context) error {
-		return ctx.String(http.StatusOK, "OKですよう")
+		return ctx.String(http.StatusOK, "OK")
 	})
-
+	// version 1
 	v1 := engine.Group("/v1")
-	v1.GET("", func(ctx echo.Context) error {
-		return ctx.String(http.StatusOK, "Welcome")
-	})
-	//認証を入れたらそこからuserIDを取ってくる。
+	// Authentication
 	// engine.Use(MyMiddleware.FirebaseAuthMiddleware(client))
 	route.InitRoute(v1)
 
