@@ -17,7 +17,7 @@ func NewDeleteTagUseCase(tagRepository tagDomain.TagRepository) *DeleteTagUseCas
 // todo項目削除
 type DeleteTagUseCaseInputDto struct {
 	Id    string
-	TagId uint
+	TagId uint64
 }
 
 // 特定の項目を削除する

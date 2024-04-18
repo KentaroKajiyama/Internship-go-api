@@ -16,40 +16,42 @@ func NewUserHandler() *UserHandler {
 	return &UserHandler{}
 }
 
-func (h *UserHandler) GetUsers(ctx echo.Context) error {
+func (h *UserHandler) GetUser(ctx echo.Context) error {
 	//リクエストパラメーター取得（リクエストのボディに対するエラーハンドリング→データ型や形式等が合っているか？）
-	var params GetUsersParams
+	var params GetUserParams
 	err := ctx.Bind(&params)
 	if err != nil {
 		return echo.NewHTTPError(http.StatusBadRequest, "Errorもろたで")
 	}
 	//バリデーション（上のerrorハンドリングとはどう違うのか→データの内容が特定のバリデーションルールに違反していないか？文字数や書き方など）
+	// I don't implement the case of ":id" param, only the case of ":firebase_uid".
 	if err = ctx.Validate(params); err != nil {
 		return echo.NewHTTPError(http.StatusBadRequest, err.Error())
 	}
 	//  Presentation -> UseCase
-	input_dto := userApp.FindUserUseCaseInputDto{
-		Id: params.Id,
+	input_dto := userApp.FindUserByUidUseCaseInputDto{
+		FirebaseUid: params.FirebaseUid,
 	}
 	// UseCase処理
-	user, err := userDi.FindUser().Find(ctx.Request().Context(), input_dto)
+	user, err := userDi.FindUserByUid().FindByUid(ctx.Request().Context(), input_dto)
 	if err != nil {
 		return fmt.Errorf("%w", err)
 	}
 	// UseCase → Presentation
 	response := UsersResponseModel{
-		Id:        user.Id(),
-		Name:      user.Name(),
-		Email:     user.Email(),
-		CreatedAt: user.CreatedAt(),
-		UpdatedAt: user.UpdatedAt(),
+		Id:          user.Id(),
+		FirebaseUid: user.FirebaseUid(),
+		Name:        user.Name(),
+		Email:       user.Email(),
+		CreatedAt:   user.CreatedAt(),
+		UpdatedAt:   user.UpdatedAt(),
 	}
 	//レスポンス。JSON形式でいいのか？
 	return ctx.JSON(http.StatusOK, response)
 }
 
 // Post 新規作成
-// 一度に一つしかtodo項目が作成されない想定
+// 一度に一つしかUser項目が作成されない想定
 func (h *UserHandler) PostUsers(ctx echo.Context) error {
 	// リクエストパラメーター取得
 	var params PostUsersParams
@@ -63,8 +65,9 @@ func (h *UserHandler) PostUsers(ctx echo.Context) error {
 	}
 	//  Presentation -> UseCase
 	input_dto := userApp.SignUpUserUseCaseInputDto{
-		Name:  params.Name,
-		Email: params.Email,
+		FirebaseUid: params.FirebaseUid,
+		Name:        params.Name,
+		Email:       params.Email,
 	}
 	// UseCase処理 ここでdbが挿入される
 	user, err := userDi.SignUpUser().SignUp(ctx.Request().Context(), input_dto)
@@ -73,11 +76,12 @@ func (h *UserHandler) PostUsers(ctx echo.Context) error {
 	}
 	// UseCase → Presentation
 	response := UsersResponseModel{
-		Id:        user.Id(),
-		Name:      user.Name(),
-		Email:     user.Email(),
-		CreatedAt: user.CreatedAt(),
-		UpdatedAt: user.UpdatedAt(),
+		Id:          user.Id(),
+		FirebaseUid: user.FirebaseUid(),
+		Name:        user.Name(),
+		Email:       user.Email(),
+		CreatedAt:   user.CreatedAt(),
+		UpdatedAt:   user.UpdatedAt(),
 	}
 	//レスポンス。JSON形式でいいのか？
 	return ctx.JSON(http.StatusOK, response)
@@ -109,11 +113,12 @@ func (h *UserHandler) PutUsers(ctx echo.Context) error {
 	}
 	// UseCase → Presentation
 	response := UsersResponseModel{
-		Id:        user.Id(),
-		Name:      user.Name(),
-		Email:     user.Email(),
-		CreatedAt: user.CreatedAt(),
-		UpdatedAt: user.UpdatedAt(),
+		Id:          user.Id(),
+		FirebaseUid: user.FirebaseUid(),
+		Name:        user.Name(),
+		Email:       user.Email(),
+		CreatedAt:   user.CreatedAt(),
+		UpdatedAt:   user.UpdatedAt(),
 	}
 	//レスポンス。JSON形式でいいのか？
 	return ctx.JSON(http.StatusOK, response)
@@ -134,9 +139,10 @@ func (h *UserHandler) DeleteUsers(ctx echo.Context) error {
 	}
 	//  Presentation -> UseCase
 	input_dto := userApp.DeleteUserUseCaseInputDto{
-		Id:    params.Id,
-		Name:  params.Name,
-		Email: params.Email,
+		Id:          params.Id,
+		FirebaseUid: params.FirebaseUid,
+		Name:        params.Name,
+		Email:       params.Email,
 	}
 	// UseCase処理
 	user, err := userDi.DeleteUser().Delete(ctx.Request().Context(), input_dto)
@@ -145,11 +151,12 @@ func (h *UserHandler) DeleteUsers(ctx echo.Context) error {
 	}
 	// UseCase → Presentation
 	response := UsersResponseModel{
-		Id:        user.Id(),
-		Name:      user.Name(),
-		Email:     user.Email(),
-		CreatedAt: user.CreatedAt(),
-		UpdatedAt: user.UpdatedAt(),
+		Id:          user.Id(),
+		FirebaseUid: user.FirebaseUid(),
+		Name:        user.Name(),
+		Email:       user.Email(),
+		CreatedAt:   user.CreatedAt(),
+		UpdatedAt:   user.UpdatedAt(),
 	}
 	//レスポンス。JSON形式でいいのか？
 	return ctx.JSON(http.StatusOK, response)

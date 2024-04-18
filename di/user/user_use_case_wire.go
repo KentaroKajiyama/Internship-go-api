@@ -32,6 +32,28 @@ func FindUser() *user.FindUserUseCase {
 	return nil
 }
 
+var provideSetFindByUid = wire.NewSet(
+	// driver
+	infrastructure.NewGormPostgres,
+
+	// Repository
+	repository.NewUserRepository,
+
+	// queryService
+
+	// domainService
+
+	// useCase
+	user.NewFindUserByUidUseCase,
+)
+
+func FindUserByUid() *user.FindUserByUidUseCase {
+	wire.Build(
+		provideSetFindByUid,
+	)
+	return nil
+}
+
 var provideSetSignUp = wire.NewSet(
 	// driver
 	infrastructure.NewGormPostgres,

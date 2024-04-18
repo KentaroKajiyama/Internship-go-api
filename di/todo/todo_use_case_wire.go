@@ -10,6 +10,7 @@ import (
 	"github.com/google/wire"
 )
 
+// FindTodo
 var provideSetFind = wire.NewSet(
 	// driver
 	infrastructure.NewGormPostgres,
@@ -32,6 +33,7 @@ func FindTodo() *todo.FindTodoUseCase {
 	return nil
 }
 
+// FindTodos
 var provideSetFindMultiple = wire.NewSet(
 	//driver
 	infrastructure.NewGormPostgres,
@@ -48,6 +50,24 @@ func FindTodos() *todo.FindTodosUseCase {
 	return nil
 }
 
+// GetTagsInTodo
+var provideSetGetTagsInTodo = wire.NewSet(
+	//driver
+	infrastructure.NewGormPostgres,
+	//Repository
+	repository.NewTodoRepository,
+	//usecase
+	todo.NewGetTagsInTodoUseCase,
+)
+
+func GetTagsInTodo() *todo.GetTagsInTodoUseCase {
+	wire.Build(
+		provideSetGetTagsInTodo,
+	)
+	return nil
+}
+
+// CreateTodo
 var provideSetCreate = wire.NewSet(
 	// driver
 	infrastructure.NewGormPostgres,
@@ -75,6 +95,63 @@ func CreateTodo() *todo.CreateTodoUseCase {
 	return nil
 }
 
+// UpdateTodo
+var provideSetUpdate = wire.NewSet(
+	// driver
+	infrastructure.NewGormPostgres,
+
+	// // client
+	// auth.NewAuthMockClient,
+	// // Note: ↑をコメントアウトして↓のコメントアウトを解除して wire gen すると mock2 が使われて SamplePingPong で println される文字列が変わる
+	// //auth.NewAuthMock2Client,
+
+	// Repository
+	repository.NewTodoRepository,
+
+	// queryService
+
+	// domainService
+
+	// useCase
+	todo.NewUpdateTodoUseCase,
+)
+
+func UpdateTodo() *todo.UpdateTodoUseCase {
+	wire.Build(
+		provideSetUpdate,
+	)
+	return nil
+}
+
+// AddTagsInTodo
+var provideSetAddTagsInTodo = wire.NewSet(
+	// driver
+	infrastructure.NewGormPostgres,
+
+	// // client
+	// auth.NewAuthMockClient,
+	// // Note: ↑をコメントアウトして↓のコメントアウトを解除して wire gen すると mock2 が使われて SamplePingPong で println される文字列が変わる
+	// //auth.NewAuthMock2Client,
+
+	// Repository
+	repository.NewTodoRepository,
+
+	// queryService
+
+	// domainService
+
+	// useCase
+	todo.NewAddTagsInTodoUseCase,
+)
+
+func AddTagsInTodo() *todo.AddTagsInTodoUseCase {
+	wire.Build(
+		provideSetAddTagsInTodo,
+	)
+	return nil
+}
+
+// DeleteTodo
 var provideSetDelete = wire.NewSet(
 	// driver
 	infrastructure.NewGormPostgres,
@@ -102,7 +179,24 @@ func DeleteTodo() *todo.DeleteTodoUseCase {
 	return nil
 }
 
-var provideSetUpdate = wire.NewSet(
+// DeleteTodos
+var provideSetDeleteMultiple = wire.NewSet(
+	// driver
+	infrastructure.NewGormPostgres,
+	// Repository
+	repository.NewTodoRepository,
+	// useCase
+	todo.NewDeleteTodosUseCase,
+)
+
+func DeleteTodos() *todo.DeleteTodosUseCase {
+	wire.Build(
+		provideSetDeleteMultiple,
+	)
+	return nil
+}
+
+var provideSetDeleteTagsInTodo = wire.NewSet(
 	// driver
 	infrastructure.NewGormPostgres,
 
@@ -119,12 +213,12 @@ var provideSetUpdate = wire.NewSet(
 	// domainService
 
 	// useCase
-	todo.NewUpdateTodoUseCase,
+	todo.NewDeleteTagsInTodoUseCase,
 )
 
-func UpdateTodo() *todo.UpdateTodoUseCase {
+func DeleteTagsInTodo() *todo.DeleteTagsInTodoUseCase {
 	wire.Build(
-		provideSetUpdate,
+		provideSetDeleteTagsInTodo,
 	)
 	return nil
 }

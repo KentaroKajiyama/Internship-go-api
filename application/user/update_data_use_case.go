@@ -16,9 +16,10 @@ func NewUpdateUserUseCase(userRepository userDomain.UserRepository) *UpdateUserU
 
 // ユーザー情報変更 この辺のuser情報の話はfirebaseを使っているのでフロントエンドだけかも
 type UpdateUserUseCaseInputDto struct {
-	Id    string
-	Name  string
-	Email string
+	Id          string
+	FirebaseUid string
+	Name        string
+	Email       string
 }
 
 func (uc *UpdateUserUseCase) Update(ctx context.Context, dto UpdateUserUseCaseInputDto) (*userDomain.User, error) {
@@ -27,7 +28,7 @@ func (uc *UpdateUserUseCase) Update(ctx context.Context, dto UpdateUserUseCaseIn
 		return nil, err
 	}
 	//変更が必要かも
-	user, err := userDomain.NewUserWithoutTime(dto.Id, dto.Name, dto.Email)
+	user, err := userDomain.NewUserWithoutTime(dto.Id, dto.FirebaseUid, dto.Name, dto.Email)
 	if err != nil {
 		return nil, err
 	}

@@ -4,21 +4,17 @@ import (
 	"context"
 	"errors"
 	"fmt"
-	"log"
 	"net/http"
 	"os"
 	"os/signal"
 	"time"
 
-	firebase "firebase.google.com/go/v4"
 	"github.com/KentaroKajiyama/Internship-go-api/config"
 	"github.com/KentaroKajiyama/Internship-go-api/infrastructure"
 	"github.com/KentaroKajiyama/Internship-go-api/pkg/validator"
-	MyMiddleware "github.com/KentaroKajiyama/Internship-go-api/presentation/server/middleware"
 	"github.com/KentaroKajiyama/Internship-go-api/presentation/server/route"
 	"github.com/labstack/echo/v4"
 	"github.com/labstack/echo/v4/middleware"
-	"google.golang.org/api/option"
 )
 
 func main() {
@@ -28,29 +24,33 @@ func main() {
 		d, _ := db.DB()
 		d.Close()
 	}()
-	//Firebase SDKの初期化
-	ctx := context.Background()
-	opt := option.WithCredentialsJSON(config.Conf.Google.CredentialsJson)
-	app, err := firebase.NewApp(ctx, nil, opt)
-	if err != nil {
-		log.Fatalf("error initializing app: %v\n", err)
-	}
-	// Firebase Auth インスタンス取得
-	client, err := app.Auth(ctx)
-	if err != nil {
-		log.Fatalf("error getting Auth client: %v\n", err)
-	}
+	// //Firebase SDKの初期化
+	// ctx := context.Background()
+	// opt := option.WithCredentialsJSON(config.Conf.Google.CredentialsJson)
+	// app, err := firebase.NewApp(ctx, nil, opt)
+	// if err != nil {
+	// 	log.Fatalf("error initializing app: %v\n", err)
+	// }
+	// // Firebase Auth インスタンス取得
+	// client, err := app.Auth(ctx)
+	// if err != nil {
+	// 	log.Fatalf("error getting Auth client: %v\n", err)
+	// }
 
 	// サーバーエンジンの生成
 	engine := echo.New()
 	engine.Debug = true
 	engine.Validator = validator.NewValidator()
+	// I didn't understand CORS well enough.
+	engine.Use(middleware.CORSWithConfig(middleware.CORSConfig{
+		AllowOrigins: []string{"http://localhost:3000"}, // or your specific set of origins
+		AllowMethods: []string{http.MethodGet, http.MethodPut, http.MethodPost, http.MethodDelete},
+		AllowHeaders: []string{echo.HeaderOrigin, echo.HeaderContentType, echo.HeaderAccept},
+	}))
 
 	//ここで最後に認証をかます
 	engine.Pre(middleware.RemoveTrailingSlash())
 	engine.Use(middleware.Recover())
-	// baseRoute := engine.Group("")
-	// health := engine.Group("/health")
 	engine.GET("", func(ctx echo.Context) error {
 		return ctx.String(http.StatusOK, "OKですよう")
 	})
@@ -60,7 +60,7 @@ func main() {
 		return ctx.String(http.StatusOK, "Welcome")
 	})
 	//認証を入れたらそこからuserIDを取ってくる。
-	engine.Use(MyMiddleware.FirebaseAuthMiddleware(client))
+	// engine.Use(MyMiddleware.FirebaseAuthMiddleware(client))
 	route.InitRoute(v1)
 
 	go func() {

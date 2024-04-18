@@ -4,17 +4,19 @@ SELECT 'up SQL query';
 CREATE OR REPLACE FUNCTION delete_todo_tag()
 RETURNS TRIGGER AS $$
 BEGIN
-    -- todos テーブルから行が削除された場合
-    IF TG_TABLE_NAME = 'todos' THEN
-        DELETE FROM "todo_tag" WHERE todo_id = OLD.todo_id;
-    END IF;
+	-- todos テーブルから行が削除された場合
+	IF TG_TABLE_NAME = 'todos' THEN
+		IF EXISTS (SELECT 1 FROM tags WHERE id = NEW.id) THEN
+			DELETE FROM "todo_tag" WHERE todo_id = OLD.todo_id;
+	END IF;
 
-    -- tags テーブルから行が削除された場合
-    IF TG_TABLE_NAME = 'tags' THEN
-        DELETE FROM "todo_tag" WHERE tag_id = OLD.tag_id;
-    END IF;
+	-- tags テーブルから行が削除された場合
+	IF TG_TABLE_NAME = 'tags' THEN
+		IF EXISTS (SELECT 1 FROM todos WHERE id = NEW.id) THEN
+			DELETE FROM "todo_tag" WHERE tag_id = OLD.tag_id;
+	END IF;
 
-    RETURN OLD;
+	RETURN OLD;
 END;
 $$ LANGUAGE plpgsql;
 

@@ -16,13 +16,14 @@ func NewSignUpUserUseCase(userRepository userDomain.UserRepository) *SignUpUserU
 
 // ユーザー登録
 type SignUpUserUseCaseInputDto struct {
-	Name  string
-	Email string
+	FirebaseUid string
+	Name        string
+	Email       string
 }
 
 func (uc *SignUpUserUseCase) SignUp(ctx context.Context, dto SignUpUserUseCaseInputDto) (*userDomain.User, error) {
 	// 名前とemailが被っていたら作れないようにしたい。
-	user, err := userDomain.NewUserWithoutIdAndTime(dto.Name, dto.Email)
+	user, err := userDomain.NewUserWithoutIdAndTime(dto.FirebaseUid, dto.Name, dto.Email)
 	if err != nil {
 		return nil, err
 	}

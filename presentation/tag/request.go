@@ -1,29 +1,34 @@
 package tag
 
 type GetTagParams struct {
-	Id    string `param:"id" query:"id" json:"id" form:"id"`
-	TagId uint   `param:"tag_id" query:"tag_id" json:"tag_id" form:"tag_id"`
+	Id    string `param:"id" validate:"required"`
+	TagId string `param:"tag_id" validate:"required"`
 	Name  string `query:"name"`
 }
 
 type GetTagsParams struct {
-	Id string `param:"id" json:"id" validate:"required"`
-	TagId uint `json:"tag_id"`
-	Name string `query:"name"`
+	Id     string `param:"id" json:"id" validate:"required"`
+	TodoId string `query:"todo_id"`
+	Name   string `query:"name"`
 }
 
 type PostTagsParams struct {
-	Id   string `param:"id" query:"id" json:"id" form:"id" `
-	Name string `json:"name" form:"name" query:"name"`
+	Id   string `param:"id" validate:"required"`
+	Name string `json:"name" validate:"required"`
 }
 
 type PutTagsParams struct {
-	Id    string `param:"id" query:"id" json:"id" form:"id"`
-	TagId uint   `param:"tag_id" query:"tag_id" json:"tag_id" form:"tag_id"`
-	Name  string `json:"name" form:"name" query:"name"`
+	Id    string `param:"id" validate:"required"`
+	TagId string `param:"tag_id" validate:"required"`
+	Name  string `json:"name" validate:"required"`
+}
+
+type DeleteTagParams struct {
+	Id    string `param:"id" validate:"required"`
+	TagId string `param:"tag_id" validate:"required"`
 }
 
 type DeleteTagsParams struct {
-	Id    string `param:"id" query:"id" json:"id" form:"id"`
-	TagId uint   `param:"tag_id" query:"tag_id" json:"tag_id" form:"tag_id"`
+	Id     string   `param:"id" validate:"required"`
+	TagIds []string `json:"tag_id_s" validate:"required"`
 }

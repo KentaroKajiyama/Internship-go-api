@@ -19,7 +19,7 @@ func TestCreateUser(t *testing.T) {
 	}()
 
 	repo := userRepo.NewUserRepository(db)
-	user, err := userDomain.NewUser("a22487c1-52f7-a6b8-dcdf-184803461e3e", "test2", "test2@example.com", time.Now().UTC(), time.Now().UTC())
+	user, err := userDomain.NewUser("a22487c1-52f7-a6b8-dcdf-184803461e3e", "ZyrZYue0U1UQ7Ay8m8eAhtibFdA2", "test2", "test2@example.com", time.Now().UTC(), time.Now().UTC())
 	if err != nil {
 		t.Fatalf("Failed to create user domain instance: %v", err)
 	}

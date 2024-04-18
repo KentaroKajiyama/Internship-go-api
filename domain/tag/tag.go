@@ -10,17 +10,22 @@ import (
 
 type Tag struct {
 	id        string
-	tagId     uint
+	tagId     uint64
 	name      string
 	createdAt time.Time
 	updatedAt time.Time
+}
+
+type Tags struct {
+	id     string
+	tagIds []uint64
 }
 
 func (s *Tag) Id() string {
 	return s.id
 }
 
-func (s *Tag) TagId() uint {
+func (s *Tag) TagId() uint64 {
 	return s.tagId
 }
 
@@ -36,7 +41,15 @@ func (s *Tag) UpdatedAt() time.Time {
 	return s.updatedAt
 }
 
-func newTag(id string, tagId uint, name string, createdAt time.Time, updatedAt time.Time) (*Tag, error) {
+func (s *Tags) Id() string {
+	return s.id
+}
+
+func (s *Tags) TagIds() []uint64 {
+	return s.tagIds
+}
+
+func newTag(id string, tagId uint64, name string, createdAt time.Time, updatedAt time.Time) (*Tag, error) {
 	// バリデーション
 	// idのバリデーション
 	if !uuid.IsValid(id) {
@@ -46,7 +59,7 @@ func newTag(id string, tagId uint, name string, createdAt time.Time, updatedAt t
 
 	// タイトルのバリデーション
 	if utf8.RuneCountInString(name) < nameLengthMin || utf8.RuneCountInString(name) > nameLengthMax {
-		return nil, errDomain.NewError("タイトルが不正です。")
+		return nil, errDomain.NewError("名前は32文字以内で設定してください。")
 	}
 	return &Tag{
 		id:        id,
@@ -57,14 +70,38 @@ func newTag(id string, tagId uint, name string, createdAt time.Time, updatedAt t
 	}, nil
 }
 
+func newTags(id string, tagIds []uint64) (*Tags, error) {
+	// Validation
+	if !uuid.IsValid(id) {
+		return nil, errDomain.NewError("Idが不正です。")
+	}
+	if len(tagIds) == 0 {
+		return nil, errDomain.NewError("TagIdが空です")
+	}
+	seenTagIds := make(map[uint64]bool)
+	for _, id := range tagIds {
+		if id <= 0 {
+			return nil, errDomain.NewError("TagIdが負の値です。")
+		}
+		if seenTagIds[id] {
+			return nil, errDomain.NewError("TagIdが重複しています。")
+		}
+		seenTagIds[id] = true
+	}
+	return &Tags{
+		id:     id,
+		tagIds: tagIds,
+	}, nil
+}
+
 const (
 	// nameの最小値・最大値
 	nameLengthMin = 1
-	nameLengthMax = 255
+	nameLengthMax = 32
 )
 
 /* tag_idをどう決めていくか→データベースで自動インクリメント*/
-func NewTag(id string, tagId uint, name string, createdAt time.Time, updatedAt time.Time) (*Tag, error) {
+func NewTag(id string, tagId uint64, name string, createdAt time.Time, updatedAt time.Time) (*Tag, error) {
 	return newTag(
 		id,
 		tagId,
@@ -74,7 +111,7 @@ func NewTag(id string, tagId uint, name string, createdAt time.Time, updatedAt t
 	)
 }
 
-func NewTagFirst(id string, tagId uint, name string) (*Tag, error) {
+func NewTagFirst(id string, tagId uint64, name string) (*Tag, error) {
 	return newTag(
 		id,
 		tagId,
@@ -84,7 +121,7 @@ func NewTagFirst(id string, tagId uint, name string) (*Tag, error) {
 	)
 }
 
-func NewTagWithoutTime(id string, tagId uint, name string) (*Tag, error) {
+func NewTagWithoutTime(id string, tagId uint64, name string) (*Tag, error) {
 	return newTag(
 		id,
 		tagId,
@@ -94,10 +131,6 @@ func NewTagWithoutTime(id string, tagId uint, name string) (*Tag, error) {
 	)
 }
 
-// func ReconstructTag(id string, tagID uint, name string) (*Tag, error) {
-// 	return newTag(
-// 		id,
-// 		tagID,
-// 		name,
-// 	)
-// }
+func NewTags(id string, tag_id_s []uint64) (*Tags, error) {
+	return newTags(id, tag_id_s)
+}

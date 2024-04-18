@@ -4,12 +4,35 @@ import "time"
 
 type TodosResponseModel struct {
 	Id          string    `json:"id"`
-	TodoId      string    `json:"todo_id"`
+	TodoId      string    `json:"todoId"`
 	Title       string    `json:"title"`
 	Description string    `json:"description"`
-	IsDeletable bool      `json:"is_deletable"`
-	CreatedAt   time.Time `json:"created_at"`
-	UpdatedAt   time.Time `json:"updated_at"`
+	IsDeletable bool      `json:"isDeletable"`
+	IsChecked   bool      `json:"isChecked"`
+	TagIds      []string  `json:"tagIds"`
+	CreatedAt   time.Time `json:"createdAt"`
+	UpdatedAt   time.Time `json:"updatedAt"`
 }
-
-// 複数個レスポンスしたい場合は？ 作成時間などは返す必要なし？
+type PutTodosResponseModel struct {
+	Id            string    `json:"id"`
+	TodoId        string    `json:"todoId"`
+	Title         string    `json:"title"`
+	Description   string    `json:"description"`
+	IsDeletable   bool      `json:"isDeletable"`
+	IsChecked     bool      `json:"isChecked"`
+	AddedTagIds   []string  `json:"addedTagIds"`
+	DeletedTagIds []string  `json:"deletedTagIds"`
+	CreatedAt     time.Time `json:"createdAt"`
+	UpdatedAt     time.Time `json:"updatedAt"`
+}
+type DeleteTodosResponseModel struct {
+	Id    string `json:"id"`
+	Todos []struct {
+		TodoId      string `json:"todoId"`
+		IsDeletable bool   `json:"isDeletable"`
+	}
+}
+type TagsInTodoResponseModel struct {
+	TodoId string   `json:"todoId"`
+	TagIds []string `json:"tagIds"`
+}

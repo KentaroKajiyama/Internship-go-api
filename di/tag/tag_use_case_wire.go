@@ -32,7 +32,7 @@ func FindTag() *tag.FindTagUseCase {
 	return nil
 }
 
-var provideSetFindMultiple = wire.NewSet(
+var provideSetFindByTodoId = wire.NewSet(
 	// driver
 	infrastructure.NewGormPostgres,
 
@@ -44,12 +44,12 @@ var provideSetFindMultiple = wire.NewSet(
 	// domainService
 
 	// useCase
-	tag.NewFindTagsUseCase,
+	tag.NewFindTagsByTodoIdUseCase,
 )
 
-func FindTags() *tag.FindTagsUseCase {
+func FindTagsByTodoId() *tag.FindTagsByTodoIdUseCase {
 	wire.Build(
-		provideSetFindMultiple,
+		provideSetFindByTodoId,
 	)
 	return nil
 }
@@ -105,7 +105,7 @@ func UpdateTag() *tag.UpdateTagUseCase {
 	wire.Build(
 		provideSetUpdate,
 	)
-	return &tag.UpdateTagUseCase{}
+	return nil
 }
 
 var provideSetDelete = wire.NewSet(
@@ -132,5 +132,32 @@ func DeleteTag() *tag.DeleteTagUseCase {
 	wire.Build(
 		provideSetDelete,
 	)
-	return &tag.DeleteTagUseCase{}
+	return nil
+}
+
+var provideSetDeleteMultiple = wire.NewSet(
+	// driver
+	infrastructure.NewGormPostgres,
+
+	// // client
+	// auth.NewAuthMockClient,
+	// // Note: ↑をコメントアウトして↓のコメントアウトを解除して wire gen すると mock2 が使われて SamplePingPong で println される文字列が変わる
+	// //auth.NewAuthMock2Client,
+
+	// Repository
+	repository.NewTagRepository,
+
+	// queryService
+
+	// domainService
+
+	// useCase
+	tag.NewDeleteTagsUseCase,
+)
+
+func DeleteTags() *tag.DeleteTagsUseCase {
+	wire.Build(
+		provideSetDeleteMultiple,
+	)
+	return nil
 }

@@ -16,7 +16,7 @@ func NewTagRepository(db *gorm.DB) tagDomain.TagRepository {
 	return &tagRepository{db: db}
 }
 
-func (r *tagRepository) Find(ctx context.Context, id string, tag_id uint) (*tagDomain.Tag, error) {
+func (r *tagRepository) Find(ctx context.Context, id string, tag_id uint64) (*tagDomain.Tag, error) {
 	conn := r.db.WithContext(ctx)
 	var tagModel model.Tag
 	var tagDomainPtr *tagDomain.Tag
@@ -32,7 +32,7 @@ func (r *tagRepository) Find(ctx context.Context, id string, tag_id uint) (*tagD
 	return tagDomainPtr, nil
 }
 
-func (r *tagRepository) FindMultiple(ctx context.Context, id string, tag_id uint, name string) ([]*tagDomain.Tag, error) {
+func (r *tagRepository) FindByTodoId(ctx context.Context, id string, todo_id string, name string) ([]*tagDomain.Tag, error) {
 	var tagsModel []model.Tag
 	var tags []*tagDomain.Tag
 	var tag *tagDomain.Tag
@@ -41,8 +41,8 @@ func (r *tagRepository) FindMultiple(ctx context.Context, id string, tag_id uint
 	if id != "" {
 		conn = conn.Where("id = ?", id)
 	}
-	if tag_id != 0 {
-		conn = conn.Where("tag_id = ?", tag_id)
+	if todo_id != "" {
+		conn = conn.Joins("JOIN todo_tag ON todo_tag.tag_id = tags.tag_id").Where("todo_id = ?", todo_id)
 	}
 	if name != "" {
 		conn = conn.Where("name = ?", name)
@@ -91,4 +91,18 @@ func (r *tagRepository) Delete(ctx context.Context, tag *tagDomain.Tag) (*tagDom
 	}
 	//データベース処理に問題がなければそのまま受け取ったtodo(domain)を返す。
 	return tagModel.ToDomainTag()
+}
+
+func (r *tagRepository) DeleteMultiple(ctx context.Context, id string, tag_id_s []uint64) (*tagDomain.Tags, error) {
+	conn := r.db.WithContext(ctx)
+
+	// transaction?
+	// In gorm, you have to pass pointer to gorm methods.
+	tx := conn.Begin()
+	if err := conn.Where("id = ? AND tag_id IN(?)", id, tag_id_s).Delete(&model.Tag{}).Error; err != nil {
+		tx.Rollback()
+		return nil, err
+	}
+	tx.Commit()
+	return tagDomain.NewTags(id, tag_id_s)
 }

@@ -5,11 +5,12 @@ import (
 )
 
 type User struct {
-	Id        string `gorm:"primaryKey"`
-	Name      string
-	Email     string
-	CreatedAt time.Time
-	UpdatedAt time.Time
+	Id          string `gorm:"type:uuid;primaryKey"`
+	FirebaseUid string `gorm:"uniqueIndex;not null"`
+	Name        string
+	Email       string `gorm:"uniqueIndex;not null"`
+	CreatedAt   time.Time
+	UpdatedAt   time.Time
 }
 
 type Todo struct {
@@ -24,8 +25,13 @@ type Todo struct {
 
 type Tag struct {
 	Id        string `gorm:"primaryKey"`
-	TagId     uint   `gorm:"primaryKey;autoincrement"`
+	TagId     uint64 `gorm:"primaryKey;autoincrement"`
 	Name      string
 	CreatedAt time.Time
 	UpdatedAt time.Time
+}
+
+type TodoTag struct {
+	TodoId string `gorm:"primaryKey"`
+	TagId  uint64 `gorm:"primaryKey"`
 }

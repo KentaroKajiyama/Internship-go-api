@@ -9,15 +9,20 @@ import (
 )
 
 type User struct {
-	id        string
-	name      string
-	email     string
-	createdAt time.Time
-	updatedAt time.Time
+	id          string
+	firebaseUid string
+	name        string
+	email       string
+	createdAt   time.Time
+	updatedAt   time.Time
 }
 
 func (s *User) Id() string {
 	return s.id
+}
+
+func (s *User) FirebaseUid() string {
+	return s.firebaseUid
 }
 
 func (s *User) Name() string {
@@ -36,7 +41,7 @@ func (s *User) UpdatedAt() time.Time {
 	return s.updatedAt
 }
 
-func newUser(id string, name string, email string, createdAt time.Time, updatedAt time.Time) (*User, error) {
+func newUser(id string, firebaseUid string, name string, email string, createdAt time.Time, updatedAt time.Time) (*User, error) {
 	// idのバリデーション
 	if !uuid.IsValid(id) {
 		return nil, errDomain.NewError("UserIDが不正です。")
@@ -51,11 +56,12 @@ func newUser(id string, name string, email string, createdAt time.Time, updatedA
 	}
 
 	return &User{
-		id:        id,
-		name:      name,
-		email:     email,
-		createdAt: createdAt,
-		updatedAt: updatedAt,
+		id:          id,
+		firebaseUid: firebaseUid,
+		name:        name,
+		email:       email,
+		createdAt:   createdAt,
+		updatedAt:   updatedAt,
 	}, nil
 }
 
@@ -67,9 +73,10 @@ const (
 	emailLengthMin = 1
 )
 
-func NewUser(id, name, email string, createdAt, updatedAt time.Time) (*User, error) {
+func NewUser(id, firebaseUid, name, email string, createdAt, updatedAt time.Time) (*User, error) {
 	return newUser(
 		id,
+		firebaseUid,
 		name,
 		email,
 		createdAt,
@@ -77,9 +84,10 @@ func NewUser(id, name, email string, createdAt, updatedAt time.Time) (*User, err
 	)
 }
 
-func NewUserWithoutTime(id string, name, email string) (*User, error) {
+func NewUserWithoutTime(id, firebaseUid string, name, email string) (*User, error) {
 	return newUser(
 		id,
+		firebaseUid,
 		name,
 		email,
 		time.Time{},
@@ -87,9 +95,10 @@ func NewUserWithoutTime(id string, name, email string) (*User, error) {
 	)
 }
 
-func NewUserWithoutIdAndTime(name, email string) (*User, error) {
+func NewUserWithoutIdAndTime(firebaseUid, name, email string) (*User, error) {
 	return newUser(
 		uuid.NewUUID(),
+		firebaseUid,
 		name,
 		email,
 		time.Time{},

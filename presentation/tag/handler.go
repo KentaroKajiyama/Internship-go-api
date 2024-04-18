@@ -4,6 +4,7 @@ package tag
 import (
 	"fmt"
 	"net/http"
+	"strconv"
 
 	tagApp "github.com/KentaroKajiyama/Internship-go-api/application/tag"
 	tagDi "github.com/KentaroKajiyama/Internship-go-api/di/tag"
@@ -29,10 +30,14 @@ func (h *tagHandler) GetTag(ctx echo.Context) error {
 	if err = ctx.Validate(&params); err != nil {
 		return echo.NewHTTPError(http.StatusBadRequest, err.Error())
 	}
-	//  Presentation -> UseCase 先に認証の実装をしてdto周りをいじる必要あり、
+	//  Presentation -> UseCase
+	tagid_for_use_case, err := strconv.ParseUint(params.TagId, 10, 64)
+	if err != nil {
+		return fmt.Errorf("%w", err)
+	}
 	input_dto := tagApp.FindTagUseCaseInputDto{
 		Id:    params.Id,
-		TagId: params.TagId,
+		TagId: tagid_for_use_case,
 	}
 	// UseCase処理
 	tag, err := tagDi.FindTag().Find(ctx.Request().Context(), input_dto)
@@ -42,8 +47,9 @@ func (h *tagHandler) GetTag(ctx echo.Context) error {
 	// UseCase → Presentation
 	response := TagsResponseModel{
 		Id:        tag.Id(),
-		TagId:     tag.TagId(),
+		TagId:     fmt.Sprint(tag.TagId()),
 		Name:      tag.Name(),
+		IsChecked: false,
 		CreatedAt: tag.CreatedAt(),
 		UpdatedAt: tag.UpdatedAt(),
 	}
@@ -51,7 +57,7 @@ func (h *tagHandler) GetTag(ctx echo.Context) error {
 	return ctx.JSON(http.StatusOK, response)
 }
 
-func (h *tagHandler) GetTags(ctx echo.Context) error {
+func (h *tagHandler) GetTagsByTodoId(ctx echo.Context) error {
 	// リクエストパラメータ取得
 	var params GetTagsParams
 	var response []TagsResponseModel
@@ -64,13 +70,13 @@ func (h *tagHandler) GetTags(ctx echo.Context) error {
 	if err = ctx.Validate(&params); err != nil {
 		return echo.NewHTTPError(http.StatusBadRequest, err.Error())
 	}
-	input_dto := tagApp.FindTagsUseCaseInputDto{
-		Id:    ctx.Get("id").(string),
-		TagId: params.TagId,
-		Name:  params.Name,
+	input_dto := tagApp.FindTagsByTodoIdUseCaseInputDto{
+		Id:     params.Id,
+		TodoId: params.TodoId,
+		Name:   params.Name,
 	}
 	// UseCase処理
-	tags, err := tagDi.FindTags().FindMultple(ctx.Request().Context(), input_dto)
+	tags, err := tagDi.FindTagsByTodoId().FindByTodoId(ctx.Request().Context(), input_dto)
 	if err != nil {
 		return fmt.Errorf("%w", err)
 	}
@@ -78,8 +84,9 @@ func (h *tagHandler) GetTags(ctx echo.Context) error {
 	for _, tag := range tags {
 		trm = TagsResponseModel{
 			Id:        tag.Id(),
-			TagId:     tag.TagId(),
+			TagId:     fmt.Sprint(tag.TagId()),
 			Name:      tag.Name(),
+			IsChecked: false,
 			CreatedAt: tag.CreatedAt(),
 			UpdatedAt: tag.UpdatedAt(),
 		}
@@ -114,8 +121,9 @@ func (h *tagHandler) PostTags(ctx echo.Context) error {
 	// UseCase → Presentation
 	response := TagsResponseModel{
 		Id:        tag.Id(),
-		TagId:     tag.TagId(),
+		TagId:     fmt.Sprint(tag.TagId()),
 		Name:      tag.Name(),
+		IsChecked: false,
 		CreatedAt: tag.CreatedAt(),
 		UpdatedAt: tag.UpdatedAt(),
 	}
@@ -126,7 +134,7 @@ func (h *tagHandler) PostTags(ctx echo.Context) error {
 // PUT 更新
 // dtoの部分をどうするか？とりあえず、wireは使わずに直感的に書いてみる
 // 一度に一つしかtag項目が更新されない想定
-func (h *tagHandler) PutTags(ctx echo.Context) error {
+func (h *tagHandler) PutTag(ctx echo.Context) error {
 	// リクエストパラメーター取得
 	var params PutTagsParams
 	err := ctx.Bind(&params)
@@ -138,9 +146,13 @@ func (h *tagHandler) PutTags(ctx echo.Context) error {
 		return echo.NewHTTPError(http.StatusBadRequest, err.Error())
 	}
 	//  Presentation -> UseCase
+	tagid_for_use_case, err := strconv.ParseUint(params.TagId, 10, 64)
+	if err != nil {
+		return fmt.Errorf("%w", err)
+	}
 	input_dto := tagApp.UpdateTagUseCaseInputDto{
 		Id:    params.Id,
-		TagId: params.TagId,
+		TagId: tagid_for_use_case,
 		Name:  params.Name,
 	}
 	// UseCase処理
@@ -151,8 +163,9 @@ func (h *tagHandler) PutTags(ctx echo.Context) error {
 	// UseCase → Presentation
 	response := TagsResponseModel{
 		Id:        tag.Id(),
-		TagId:     tag.TagId(),
+		TagId:     fmt.Sprint(tag.TagId()),
 		Name:      tag.Name(),
+		IsChecked: false,
 		CreatedAt: tag.CreatedAt(),
 		UpdatedAt: tag.UpdatedAt(),
 	}
@@ -163,9 +176,9 @@ func (h *tagHandler) PutTags(ctx echo.Context) error {
 // DELETE 削除
 // dtoの部分をどうするか？とりあえず、wireは使わずに直感的に書いてみる
 // 一度に一つしかtag項目が削除されない想定？流石に削除は複数個まとめたい。
-func (h *tagHandler) DeleteTags(ctx echo.Context) error {
+func (h *tagHandler) DeleteTag(ctx echo.Context) error {
 	// リクエストパラメーター取得
-	var params DeleteTagsParams
+	var params DeleteTagParams
 	err := ctx.Bind(&params)
 	if err != nil {
 		return ctx.String(http.StatusBadRequest, "bad request")
@@ -175,9 +188,13 @@ func (h *tagHandler) DeleteTags(ctx echo.Context) error {
 		return echo.NewHTTPError(http.StatusBadRequest, err.Error())
 	}
 	//  Presentation -> UseCase
+	tagid_for_use_case, err := strconv.ParseUint(params.TagId, 10, 64)
+	if err != nil {
+		return fmt.Errorf("%w", err)
+	}
 	input_dto := tagApp.DeleteTagUseCaseInputDto{
 		Id:    params.Id,
-		TagId: params.TagId,
+		TagId: tagid_for_use_case,
 	}
 	// UseCase処理
 	tag, err := tagDi.DeleteTag().Delete(ctx.Request().Context(), input_dto)
@@ -187,11 +204,55 @@ func (h *tagHandler) DeleteTags(ctx echo.Context) error {
 	// UseCase → Presentation
 	response := TagsResponseModel{
 		Id:        tag.Id(),
-		TagId:     tag.TagId(),
+		TagId:     fmt.Sprint(tag.TagId()),
 		Name:      tag.Name(),
+		IsChecked: false,
 		CreatedAt: tag.CreatedAt(),
 		UpdatedAt: tag.UpdatedAt(),
 	}
 	//レスポンス。JSON形式でいいのか？
+	return ctx.JSON(http.StatusOK, response)
+}
+
+func (h *tagHandler) DeleteTags(ctx echo.Context) error {
+	// リクエストパラメーター取得
+	var params DeleteTagsParams
+	var responseTagIds []string
+	err := ctx.Bind(&params)
+	if err != nil {
+		return ctx.String(http.StatusBadRequest, "bad request")
+	}
+	//バリデーション（上のerrorハンドリングとはどう違うのか）
+	if err = ctx.Validate(params); err != nil {
+		fmt.Printf("An error is happening: %v\n", err)
+		return echo.NewHTTPError(http.StatusBadRequest, err.Error())
+	}
+	// Transform params into dto.
+	tagids_for_use_case := make([]uint64, 0)
+	for _, tagId := range params.TagIds {
+		tagid_for_use_case, err := strconv.ParseUint(tagId, 10, 64)
+		if err != nil {
+			return fmt.Errorf("%w", err)
+		}
+		tagids_for_use_case = append(tagids_for_use_case, tagid_for_use_case)
+	}
+	input_dto := tagApp.DeleteTagsUseCaseInputDto{
+		Id:     params.Id,
+		TagIds: tagids_for_use_case,
+	}
+	// Usecase
+	tags, err := tagDi.DeleteTags().DeleteTags(ctx.Request().Context(), input_dto)
+	if err != nil {
+		return echo.NewHTTPError(http.StatusUnauthorized, err.Error())
+	}
+	// UseCase → Presentation
+	for _, tagId := range tags.TagIds() {
+		responseTagIds = append(responseTagIds, fmt.Sprint(tagId))
+	}
+	response := DeleteTagsResponseModel{
+		Id:     tags.Id(),
+		TagIds: responseTagIds,
+	}
+	//Response
 	return ctx.JSON(http.StatusOK, response)
 }

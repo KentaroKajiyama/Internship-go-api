@@ -17,7 +17,7 @@ func NewUpdateTagUseCase(tagRepository tagDomain.TagRepository) *UpdateTagUseCas
 // tag項目更新
 type UpdateTagUseCaseInputDto struct {
 	Id    string
-	TagId uint
+	TagId uint64
 	Name  string
 }
 

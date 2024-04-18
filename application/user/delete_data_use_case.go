@@ -16,13 +16,14 @@ func NewDeleteUserUseCase(userRepository userDomain.UserRepository) *DeleteUserU
 
 // ユーザー登録
 type DeleteUserUseCaseInputDto struct {
-	Id    string
-	Name  string
-	Email string
+	Id          string
+	FirebaseUid string
+	Name        string
+	Email       string
 }
 
 func (uc *DeleteUserUseCase) Delete(ctx context.Context, dto DeleteUserUseCaseInputDto) (*userDomain.User, error) {
-	user, err := userDomain.NewUserWithoutTime(dto.Id, dto.Name, dto.Email)
+	user, err := userDomain.NewUserWithoutTime(dto.Id, dto.FirebaseUid, dto.Name, dto.Email)
 	if err != nil {
 		return nil, err
 	}

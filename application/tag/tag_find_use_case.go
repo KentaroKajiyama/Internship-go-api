@@ -16,7 +16,7 @@ func NewFindTagUseCase(tagRepository tagDomain.TagRepository) *FindTagUseCase {
 
 type FindTagUseCaseInputDto struct {
 	Id    string
-	TagId uint
+	TagId uint64
 }
 
 func (uc *FindTagUseCase) Find(ctx context.Context, dto FindTagUseCaseInputDto) (*tagDomain.Tag, error) {

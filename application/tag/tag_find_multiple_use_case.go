@@ -6,22 +6,22 @@ import (
 	tagDomain "github.com/KentaroKajiyama/Internship-go-api/domain/tag"
 )
 
-type FindTagsUseCase struct {
+type FindTagsByTodoIdUseCase struct {
 	tagRepository tagDomain.TagRepository
 }
 
-func NewFindTagsUseCase(tagRepository tagDomain.TagRepository) *FindTagsUseCase {
-	return &FindTagsUseCase{tagRepository: tagRepository}
+func NewFindTagsByTodoIdUseCase(tagRepository tagDomain.TagRepository) *FindTagsByTodoIdUseCase {
+	return &FindTagsByTodoIdUseCase{tagRepository: tagRepository}
 }
 
-type FindTagsUseCaseInputDto struct {
-	Id    string
-	TagId uint
-	Name  string
+type FindTagsByTodoIdUseCaseInputDto struct {
+	Id     string
+	TodoId string
+	Name   string
 }
 
-func (uc *FindTagsUseCase) FindMultple(ctx context.Context, dto FindTagsUseCaseInputDto) ([]*tagDomain.Tag, error) {
-	tags, err := uc.tagRepository.FindMultiple(ctx, dto.Id, dto.TagId, dto.Name)
+func (uc *FindTagsByTodoIdUseCase) FindByTodoId(ctx context.Context, dto FindTagsByTodoIdUseCaseInputDto) ([]*tagDomain.Tag, error) {
+	tags, err := uc.tagRepository.FindByTodoId(ctx, dto.Id, dto.TodoId, dto.Name)
 	if err != nil {
 		return nil, err
 	}

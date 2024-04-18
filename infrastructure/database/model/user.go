@@ -7,15 +7,16 @@ import (
 )
 
 func (s *User) ToDomainUser() (*userDomain.User, error) {
-	return userDomain.NewUser(s.Id, s.Name, s.Email, s.CreatedAt, s.UpdatedAt)
+	return userDomain.NewUser(s.Id, s.FirebaseUid, s.Name, s.Email, s.CreatedAt, s.UpdatedAt)
 }
 
 func NewUserFromDomainUser(user *userDomain.User) User {
 	return User{
-		Id:        user.Id(),
-		Name:      user.Name(),
-		Email:     user.Email(),
-		CreatedAt: time.Time{},
-		UpdatedAt: time.Time{},
+		Id:          user.Id(),
+		FirebaseUid: user.FirebaseUid(),
+		Name:        user.Name(),
+		Email:       user.Email(),
+		CreatedAt:   time.Time{},
+		UpdatedAt:   time.Time{},
 	}
 }
